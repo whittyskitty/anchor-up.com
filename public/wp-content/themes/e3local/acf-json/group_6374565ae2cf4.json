@@ -1,0 +1,120 @@
+{
+    "key": "group_6374565ae2cf4",
+    "title": "Block: Video Background & Donation Form",
+    "fields": [
+        {
+            "key": "field_6374565aed068",
+            "label": "Video Background",
+            "name": "video_background",
+            "type": "file",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "url",
+            "library": "all",
+            "min_size": "",
+            "max_size": "",
+            "mime_types": ".mp4"
+        },
+        {
+            "key": "field_6374565aed079",
+            "label": "Above Donation Form Header",
+            "name": "above_donation_form_header",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Donate to The Aloe Family",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_6374565aed081",
+            "label": "Video Header",
+            "name": "video_header",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Help us Equip future leaders to change cycles of poverty in their environments through healing, hope and community empowerment.",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_637456c88a4d2",
+            "label": "Video Text",
+            "name": "video_text",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Poverty and lack of stable family support can be crippling. But through relationships, education, and hope- anything is possible. By giving to The Aloe Family, you spark change for brighter futures.",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_637457b034b76",
+            "label": "Donation Form Embed Code",
+            "name": "donation_form_embed_code",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "<script type=\"text\/javascript\" src=\"https:\/\/secure.lglforms.com\/form_engine\/s\/t_LVau_VWMYvzPyTGLUBMA.js\"><\/script>",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": "",
+            "new_lines": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "acf\/video-donation-block"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1693352499
+}

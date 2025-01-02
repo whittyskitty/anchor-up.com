@@ -1,0 +1,10 @@
+{
+    "require": {
+        "php": "~7.4",
+        "johnbillion/extended-cpts": "^4.3",
+        "vlucas/phpdotenv": "^5.4",
+        "symfony/var-dumper": "^4.3",
+        "ext-soap": "*",
+        "ext-gd": "*"
+    }
+}

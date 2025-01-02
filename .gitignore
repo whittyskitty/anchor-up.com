@@ -1,0 +1,14 @@
+.env
+/public/wp-content/uploads
+/public/wp-content/debug.log
+composer.phar
+/vendor
+/vendor/*
+__MACOSX/
+__MACOSX/*
+scripts/tmp/*
+node_modules
+/.DS_Store
+.DS_Store
+logs
+/public-old
