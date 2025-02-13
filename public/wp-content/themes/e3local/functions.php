@@ -179,3 +179,14 @@ function rename_options_page($page)
 
     return $page;
 }
+
+function enqueue_digital_stylesheet() {
+    wp_enqueue_style(
+        'digital-styles', // Handle for the stylesheet
+        get_template_directory_uri() . '/css/digital.css', // Path to your stylesheet
+        array(), // Dependencies, if any
+        filemtime(get_template_directory() . '/css/digital.css'), // Versioning for cache-busting
+        'all' // Media type
+    );
+}
+add_action('wp_enqueue_scripts', 'enqueue_digital_stylesheet');
