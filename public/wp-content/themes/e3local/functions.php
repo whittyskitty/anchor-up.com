@@ -239,8 +239,8 @@ function google_maps_shortcode($atts) {
 
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 9,
-                center: { lat: 40.7406, lng: -79.9959 } // Set the default center of the map
+				zoom: 4,  // Adjusted zoom level to show the entire USA
+                center: { lat: 39.8283, lng: -98.5795 } // Centered in the middle of the US
             });
 
             var markers = [];
