@@ -347,24 +347,24 @@ function google_maps_this_is_us_shortcode($atts) {
     ), $atts);
 
     ob_start();
-  ?>
+    ?>
     <div id="map" style="height:500px"></div>
     <script>
-        var map_this_is_us; // Renamed map variable
-        var infoWindow_this_is_us; // Renamed infoWindow variable
+        var map; // Declare map and infoWindow variables at a higher scope to access them later
+        var infoWindow;
 
-        function initMap_this_is_us() { // Renamed initMap function
-            map_this_is_us = new google.maps.Map(document.getElementById('map'), {
-                zoom: 4, 
-                center: { lat: 39.8283, lng: -98.5795 } 
+        function initThisIsUsMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 4,  // Adjusted zoom level to show the entire USA
+                center: { lat: 39.8283, lng: -98.5795 } // Centered in the middle of the US
             });
 
-            var markers_this_is_us =; // Renamed markers variable
+            var markers = [];
 
-            var this_is_us_locations = [ // Renamed locations variable
+            var locations = [
                 <?php
                 $args = array(
-                    'post_type' => 'this-is-us-location', 
+                    'post_type' => 'this-is-us-location', // Replace with your custom post type
                     'posts_per_page' => -1
                 );
                 $query = new WP_Query($args);
@@ -373,34 +373,36 @@ function google_maps_this_is_us_shortcode($atts) {
                     while ($query->have_posts()) {
                         $query->the_post();
                         $location_name = get_the_title();
-                        $store_owner = get_field('store_owner'); 
-                        $location_address = get_field('location_address'); 
-                        $city_state = get_field('city_state');
-                        $location_website = get_field('location_website'); 
-                        $location_video_url = get_field('location_video_url');
+						$store_owner = get_field('store_owner'); // Replace with your ACF field name
+                        $location_address = get_field('location_address'); // Replace with your ACF field name
+						$city_state = get_field('city_state'); // Replace with your ACF field name
+						$location_website = get_field('location_website'); // Replace with your ACF field name
+						$location_video_url = get_field('location_video'); // Replace with your ACF field name
 
                         $location_permalink = get_permalink();
 
                         if ($location_address) {
-                            echo "{ name: '". esc_js($location_name). "', address: '". esc_js($location_address). "', permalink: '". esc_js($location_permalink). "'},";
+                            echo "{ name: '" . esc_js($location_name) . "', address: '" . esc_js($location_address) . "', permalink: '" . esc_js($location_permalink) . "'},";
                         }
                     }
                 }
                 wp_reset_postdata();
-              ?>
+                ?>
             ];
 
-            for (var i = 0; i < this_is_us_locations.length; i++) { // Using renamed variable
-                var geocoder_this_is_us = new google.maps.Geocoder(); // Renamed geocoder variable
-                geocodeAddress_this_is_us(geocoder_this_is_us, map_this_is_us, this_is_us_locations[i], markers_this_is_us); // Using renamed function and variables
+            // ...
+
+            for (var i = 0; i < locations.length; i++) {
+                var geocoder = new google.maps.Geocoder();
+                geocodeAddressThisIsUs(geocoder, map, locations[i], markers);
             }
 
-            function geocodeAddress_this_is_us(geocoder, map, location, markers) { // Renamed geocodeAddress function
+            function geocodeAddressThisIsUs(geocoder, map, location, markers) {
                 geocoder.geocode({ address: location.address }, function(results, status) {
                     if (status === 'OK') {
                         var marker = new google.maps.Marker({
                             map: map,
-                            position: results.geometry.location,
+                            position: results[0].geometry.location,
                             title: location.name
                         });
 
@@ -409,15 +411,16 @@ function google_maps_this_is_us_shortcode($atts) {
                         var locationInfo = '<h3 class="pb-2" style="font-weight:500;">' + location.name + '</h3><p class="pb-1">' + location.address + '</p><p class="pb-1"><a href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(location.address) + '" target="_blank">Get Directions</a></p><a class="pb-1" href="' + location.permalink + '">View Location Details</a>';
 
                         marker.addListener('click', function() {
-                            if (infoWindow_this_is_us) { // Using renamed variable
-                                infoWindow_this_is_us.close(); // Using renamed variable
+                            // Close the previously opened info window, if any
+                            if (infoWindow) {
+                                infoWindow.close();
                             }
 
-                            infoWindow_this_is_us = new google.maps.InfoWindow({ // Using renamed variable
+                            infoWindow = new google.maps.InfoWindow({
                                 content: locationInfo
                             });
 
-                            infoWindow_this_is_us.open(map, marker); // Using renamed variable
+                            infoWindow.open(map, marker);
                         });
                     } else {
                         console.log('Geocode was not successful for the following reason: ' + status);
@@ -426,7 +429,7 @@ function google_maps_this_is_us_shortcode($atts) {
             }
         }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $atts['api_key'];?>&callback=initMap_this_is_us" async defer></script> // Updated callback function name
+    <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $atts['api_key']; ?>&callback=initThisIsUsMap" async defer></script>
     <?php
     return ob_get_clean();
 }
