@@ -316,3 +316,120 @@ function google_maps_shortcode($atts) {
     <?php
     return ob_get_clean();
 }
+
+
+add_action('init', 'this_is_us_locations_post_type');
+function this_is_us_locations_post_type() {
+    $labels = array(
+        'name' => 'This Is Us Locations',
+        'singular_name' => 'This Is Us Location',
+
+    );
+
+    $args = array(
+        'labels' => $labels,
+        'public' => true,
+        'has_archive' => 'this-is-us-locations', // Set the archive slug to 'locations'
+        'supports' => array('title', 'editor','thumbnail'), //'editor'
+        'menu_icon' => 'dashicons-location', // Set the Dashicon class for the menu icon
+
+    );
+
+    register_post_type('this-is-us-location', $args);
+    
+}
+
+/* Google Maps Locations Shortcode */
+add_shortcode('google_maps_this_is_us_locations', 'google_maps_this_is_us_shortcode');
+function google_maps_this_is_us_shortcode($atts) {
+    $atts = shortcode_atts(array(
+        'api_key' => 'AIzaSyD-YOe4j4bcSPO53h71D_NXDZwXYa8-kc8'
+    ), $atts);
+
+    ob_start();
+    ?>
+    <div id="map" style="height:500px"></div>
+    <script>
+        var map; // Declare map and infoWindow variables at a higher scope to access them later
+        var infoWindow;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 4,  // Adjusted zoom level to show the entire USA
+                center: { lat: 39.8283, lng: -98.5795 } // Centered in the middle of the US
+            });
+
+            var markers = [];
+
+            var locations = [
+                <?php
+                $args = array(
+                    'post_type' => 'this-is-us-location', // Replace with your custom post type
+                    'posts_per_page' => -1
+                );
+                $query = new WP_Query($args);
+
+                if ($query->have_posts()) {
+                    while ($query->have_posts()) {
+                        $query->the_post();
+                        $location_name = get_the_title();
+						$store_owner = get_field('store_owner'); // Replace with your ACF field name
+                        $location_address = get_field('location_address'); // Replace with your ACF field name
+						$city_state = get_field('city_state'); // Replace with your ACF field name
+						$location_website = get_field('location_website'); // Replace with your ACF field name
+						$location_video_url = get_field('location_video_url'); // Replace with your ACF field name
+
+                        $location_permalink = get_permalink();
+
+                        if ($location_address) {
+                            echo "{ name: '" . esc_js($location_name) . "', address: '" . esc_js($location_address) . "', permalink: '" . esc_js($location_permalink) . "'},";
+                        }
+                    }
+                }
+                wp_reset_postdata();
+                ?>
+            ];
+
+            // ...
+
+            for (var i = 0; i < locations.length; i++) {
+                var geocoder = new google.maps.Geocoder();
+                geocodeAddress(geocoder, map, locations[i], markers);
+            }
+
+            function geocodeAddress(geocoder, map, location, markers) {
+                geocoder.geocode({ address: location.address }, function(results, status) {
+                    if (status === 'OK') {
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            position: results[0].geometry.location,
+                            title: location.name
+                        });
+
+                        markers.push(marker);
+
+                        var locationInfo = '<h3 class="pb-2" style="font-weight:500;">' + location.name + '</h3><p class="pb-1">' + location.address + '</p><p class="pb-1"><a href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(location.address) + '" target="_blank">Get Directions</a></p><a class="pb-1" href="' + location.permalink + '">View Location Details</a>';
+
+                        marker.addListener('click', function() {
+                            // Close the previously opened info window, if any
+                            if (infoWindow) {
+                                infoWindow.close();
+                            }
+
+                            infoWindow = new google.maps.InfoWindow({
+                                content: locationInfo
+                            });
+
+                            infoWindow.open(map, marker);
+                        });
+                    } else {
+                        console.log('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
+            }
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $atts['api_key']; ?>&callback=initMap" async defer></script>
+    <?php
+    return ob_get_clean();
+}
