@@ -353,7 +353,7 @@ function google_maps_this_is_us_shortcode($atts) {
         var map; // Declare map and infoWindow variables at a higher scope to access them later
         var infoWindow;
 
-        function initThisIsUsMap() {
+        function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
 				zoom: 4,  // Adjusted zoom level to show the entire USA
                 center: { lat: 39.8283, lng: -98.5795 } // Centered in the middle of the US
@@ -389,47 +389,10 @@ function google_maps_this_is_us_shortcode($atts) {
                 wp_reset_postdata();
                 ?>
             ];
-
-            // ...
-
-            for (var i = 0; i < locations.length; i++) {
-                var geocoder = new google.maps.Geocoder();
-                geocodeAddressThisIsUs(geocoder, map, locations[i], markers);
-            }
-
-            function geocodeAddressThisIsUs(geocoder, map, location, markers) {
-                geocoder.geocode({ address: location.address }, function(results, status) {
-                    if (status === 'OK') {
-                        var marker = new google.maps.Marker({
-                            map: map,
-                            position: results[0].geometry.location,
-                            title: location.name
-                        });
-
-                        markers.push(marker);
-
-                        var locationInfo = '<h3 class="pb-2" style="font-weight:500;">' + location.name + '</h3><p class="pb-1">' + location.address + '</p><p class="pb-1"><a href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(location.address) + '" target="_blank">Get Directions</a></p><a class="pb-1" href="' + location.permalink + '">View Location Details</a>';
-
-                        marker.addListener('click', function() {
-                            // Close the previously opened info window, if any
-                            if (infoWindow) {
-                                infoWindow.close();
-                            }
-
-                            infoWindow = new google.maps.InfoWindow({
-                                content: locationInfo
-                            });
-
-                            infoWindow.open(map, marker);
-                        });
-                    } else {
-                        console.log('Geocode was not successful for the following reason: ' + status);
-                    }
-                });
-            }
+			
         }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $atts['api_key']; ?>&callback=initThisIsUsMap" async defer></script>
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $atts['api_key']; ?>&callback=initThisIsUsMap" async defer></script> -->
     <?php
     return ob_get_clean();
 }
