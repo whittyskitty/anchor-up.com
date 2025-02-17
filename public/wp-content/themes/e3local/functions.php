@@ -257,7 +257,11 @@ function google_maps_shortcode($atts) {
                     while ($query->have_posts()) {
                         $query->the_post();
                         $location_name = get_the_title();
+						$store_owner = get_field('store_owner'); // Replace with your ACF field name
                         $location_address = get_field('location_address'); // Replace with your ACF field name
+						$city_state = get_field('city_state'); // Replace with your ACF field name
+						$location_website = get_field('location_website'); // Replace with your ACF field name
+
                         $location_permalink = get_permalink();
 
                         if ($location_address) {
