@@ -3,6 +3,16 @@
 /**
  * Theme setup.
  */
+
+$auto_include_dirs = ['classes'];
+foreach ($auto_include_dirs as $dir){
+	$dirpath = __DIR__.'/'.$dir;
+	$files = preg_grep('/^([^.])/', scandir($dirpath));
+	foreach ($files as $f){
+		require_once $dirpath.'/'.$f;
+	}
+}
+
 function tailpress_setup() {
 	add_theme_support( 'title-tag' );
 
