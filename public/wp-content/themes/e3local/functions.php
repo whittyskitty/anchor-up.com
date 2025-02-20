@@ -393,8 +393,14 @@ function google_maps_this_is_us_shortcode()
                         });
 
                         marker.addListener('click', function() {
-                            var videoEmbed = location.video_url ?
-                                '<iframe width="250" height="140" src="' + location.video_url + '" frameborder="0" allowfullscreen></iframe><br>' :
+                            var videoUrl = location.video_url;
+
+                            // Convert youtu.be URLs to embed format
+                            if (videoUrl.includes("youtu.be")) {
+                                videoUrl = videoUrl.replace("youtu.be/", "www.youtube.com/embed/");
+                            }
+                            var videoEmbed = videoUrl ?
+                                '<iframe width="250" height="140" src="' + videoUrl + '" frameborder="0" allowfullscreen></iframe><br>' :
                                 '';
 
                             infoWindow.setContent(
