@@ -202,6 +202,14 @@ function enqueue_digital_stylesheet() {
 add_action('wp_enqueue_scripts', 'enqueue_digital_stylesheet');
 
 
+add_action('wp_enqueue_scripts', 'enqueue_google_maps_api');
+function enqueue_google_maps_api() {
+    if (!is_admin()) {
+        wp_enqueue_script('google-maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyD-YOe4j4bcSPO53h71D_NXDZwXYa8-kc8', array(), null, true);
+    }
+}
+
+
 add_action('init', 'locations_post_type');
 function locations_post_type() {
     $labels = array(
@@ -283,8 +291,11 @@ function google_maps_shortcode($atts) {
                 });
             });
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            initMapLocations();
+        });
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $atts['api_key']; ?>&callback=initMapLocations" async defer></script>
     <?php
     return ob_get_clean();
 }
@@ -312,11 +323,7 @@ function this_is_us_locations_post_type() {
 
 
 add_shortcode('google_maps_this_is_us', 'google_maps_this_is_us_shortcode');
-function google_maps_this_is_us_shortcode($atts) {
-    $atts = shortcode_atts(array(
-        'api_key' => 'AIzaSyD-YOe4j4bcSPO53h71D_NXDZwXYa8-kc8'
-    ), $atts);
-
+function google_maps_this_is_us_shortcode() {
     ob_start();
     ?>
     <div id="map-this-is-us" style="height:500px"></div>
@@ -371,8 +378,12 @@ function google_maps_this_is_us_shortcode($atts) {
                 });
             });
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            initMapThisIsUs();
+        });
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $atts['api_key']; ?>&callback=initMapThisIsUs" async defer></script>
     <?php
     return ob_get_clean();
 }
+
