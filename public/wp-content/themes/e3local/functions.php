@@ -400,7 +400,7 @@ function google_maps_this_is_us_shortcode()
                                 videoUrl = videoUrl.replace("youtu.be/", "www.youtube.com/embed/");
                             }
                             var videoEmbed = videoUrl ?
-                                '<iframe width="250" height="140" src="' + videoUrl + '" frameborder="0" allowfullscreen></iframe><br>' :
+                                '<iframe style="min-height:190px" width="250" height="140" src="' + videoUrl + '" frameborder="0" allowfullscreen></iframe><br>' :
                                 '';
 
                             infoWindow.setContent(
