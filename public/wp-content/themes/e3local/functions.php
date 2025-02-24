@@ -369,8 +369,28 @@ function google_maps_this_is_us_shortcode()
                         $location_permalink = get_permalink();
                         $location_video_url = get_field('location_video_url');
 
+                        $video_url = $location_video_url;
+
+                         // If the url uses the shorts
+                        if (strpos($video_url, 'shorts') !== false) {
+                            // Find the last position of "short/"
+                            $shortPos = strrpos($video_url, "shorts/") + strlen("shorts/");
+
+                            // Find the position of "?"
+                            $questionMarkPos = strpos($video_url, "?");
+
+                            // Extract the substring between the last "short/" and "?"
+                            $video_id = substr($video_url, $shortPos, $questionMarkPos - $shortPos);
+
+                            return $video_id;
+                        } else {
+                            preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#", $video_url, $video_id);
+                            $video_id = $video_id[0];
+                            $location_video_id = $video_id;
+                        }
+
                         if ($location_address) {
-                            echo "{ name: '" . esc_js($location_name) . "', address: '" . esc_js($location_address) . "', video_url: '" . esc_js($location_video_url) . "'},";
+                            echo "{ name: '" . esc_js($location_name) . "', address: '" . esc_js($location_address) . "', video_url_id: '" . esc_js($location_video_id) . "'},";
                         }
                     }
                 }
@@ -393,14 +413,14 @@ function google_maps_this_is_us_shortcode()
                         });
 
                         marker.addListener('click', function() {
-                            var videoUrl = location.video_url;
+                            var videoUrlId = location.video_url_id;
 
                             // Convert youtu.be URLs to embed format
                             if (videoUrl.includes("youtu.be")) {
                                 videoUrl = videoUrl.replace("youtu.be/", "www.youtube.com/embed/");
                             }
                             var videoEmbed = videoUrl ?
-                                '<iframe style="min-height:190px" width="250" height="140" src="' + videoUrl + '" frameborder="0" allowfullscreen></iframe><br>' :
+                                '<iframe style="min-height:190px" width="250" height="140" src="https://www.youtube.com/embed/' + videoUrlId + '" frameborder="0" allowfullscreen></iframe><br>' :
                                 '';
 
                             infoWindow.setContent(
