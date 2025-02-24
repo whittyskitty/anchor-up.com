@@ -305,6 +305,13 @@ function google_maps_shortcode($atts)
                     }
                 });
             });
+            // Select a random location and trigger its marker's click event
+            setTimeout(function() {
+                if (markers.length > 0) {
+                    var randomIndex = Math.floor(Math.random() * markers.length);
+                    google.maps.event.trigger(markers[randomIndex], 'click');
+                }
+            }, 2000);
         }
 
         document.addEventListener("DOMContentLoaded", function() {
