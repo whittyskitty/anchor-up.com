@@ -371,26 +371,18 @@ function google_maps_this_is_us_shortcode()
 
                         $video_url = $location_video_url;
 
-                         // If the url uses the shorts
+                        // If the URL contains "shorts"
                         if (strpos($video_url, 'shorts') !== false) {
-                            // Find the last position of "short/"
                             $shortPos = strrpos($video_url, "shorts/") + strlen("shorts/");
-
-                            // Find the position of "?"
                             $questionMarkPos = strpos($video_url, "?");
-
-                            // Extract the substring between the last "short/" and "?"
                             $video_id = substr($video_url, $shortPos, $questionMarkPos - $shortPos);
-
-                            return $video_id;
                         } else {
                             preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#", $video_url, $video_id);
                             $video_id = $video_id[0];
-                            $location_video_id = $video_id;
                         }
 
                         if ($location_address) {
-                            echo "{ name: '" . esc_js($location_name) . "', address: '" . esc_js($location_address) . "', video_url_id: '" . esc_js($location_video_id) . "'},";
+                            echo "{ name: '" . esc_js($location_name) . "', address: '" . esc_js($location_address) . "', video_url_id: '" . esc_js($video_id) . "'},";
                         }
                     }
                 }
@@ -400,8 +392,9 @@ function google_maps_this_is_us_shortcode()
 
             var geocoder = new google.maps.Geocoder();
             var infoWindow = new google.maps.InfoWindow();
+            var markers = [];
 
-            locations.forEach(function(location) {
+            locations.forEach(function(location, index) {
                 geocoder.geocode({
                     address: location.address
                 }, function(results, status) {
@@ -415,18 +408,37 @@ function google_maps_this_is_us_shortcode()
                         marker.addListener('click', function() {
                             var videoUrlId = location.video_url_id;
 
-                            var videoEmbed ='<iframe style="min-height:190px" width="250" height="140" src="https://www.youtube.com/embed/' + videoUrlId + '" frameborder="0" allowfullscreen></iframe><br>';
+                            var videoEmbed = videoUrlId ?
+                                '<iframe style="min-height:190px" width="250" height="140" src="https://www.youtube.com/embed/' + videoUrlId + '" frameborder="0" allowfullscreen></iframe><br>' :
+                                '';
 
                             infoWindow.setContent(
                                 videoEmbed +
                                 '<h3>' + location.name + '</h3>' +
                                 '<p>' + location.address + '</p>'
-                            )
+                            );
                             infoWindow.open(mapThisIsUs, marker);
                         });
+
+                        markers.push(marker);
+
+                        // If it's the first marker, or we randomly select it, open it on page load
+                        if (index === 0) {
+                            setTimeout(function() {
+                                google.maps.event.trigger(marker, 'click');
+                            }, 1000);
+                        }
                     }
                 });
             });
+
+            // Select a random location and trigger its marker's click event
+            setTimeout(function() {
+                if (markers.length > 0) {
+                    var randomIndex = Math.floor(Math.random() * markers.length);
+                    google.maps.event.trigger(markers[randomIndex], 'click');
+                }
+            }, 2000);
         }
 
         document.addEventListener("DOMContentLoaded", function() {
