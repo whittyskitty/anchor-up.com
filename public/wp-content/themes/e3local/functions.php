@@ -415,13 +415,7 @@ function google_maps_this_is_us_shortcode()
                         marker.addListener('click', function() {
                             var videoUrlId = location.video_url_id;
 
-                            // Convert youtu.be URLs to embed format
-                            if (videoUrl.includes("youtu.be")) {
-                                videoUrl = videoUrl.replace("youtu.be/", "www.youtube.com/embed/");
-                            }
-                            var videoEmbed = videoUrl ?
-                                '<iframe style="min-height:190px" width="250" height="140" src="https://www.youtube.com/embed/' + videoUrlId + '" frameborder="0" allowfullscreen></iframe><br>' :
-                                '';
+                            var videoEmbed ='<iframe style="min-height:190px" width="250" height="140" src="https://www.youtube.com/embed/' + videoUrlId + '" frameborder="0" allowfullscreen></iframe><br>';
 
                             infoWindow.setContent(
                                 videoEmbed +
