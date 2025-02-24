@@ -286,6 +286,7 @@ function google_maps_shortcode($atts)
 
             var geocoder = new google.maps.Geocoder();
             var infoWindow = new google.maps.InfoWindow();
+            var markers = [];
 
             locations.forEach(function(location) {
                 geocoder.geocode({
@@ -302,6 +303,15 @@ function google_maps_shortcode($atts)
                             infoWindow.setContent('<h3>' + location.name + '</h3><p>' + location.address + '</p>');
                             infoWindow.open(mapLocations, marker);
                         });
+
+                        markers.push(marker);
+
+                        // If it's the first marker, or we randomly select it, open it on page load
+                        if (index === 0) {
+                            setTimeout(function() {
+                                google.maps.event.trigger(marker, 'click');
+                            }, 1000);
+                        }
                     }
                 });
             });
