@@ -9,7 +9,7 @@
 
 <footer id="colophon" class="site-footer" role="contentinfo">
 
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-YOe4j4bcSPO53h71D_NXDZwXYa8-kc8&callback=initMap" async defer></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsFI_hZvdKk_VXf6YORSZaG-Oz2Amyy08&callback=initMap" async defer></script>
 
 
 	<?php do_action( 'tailpress_footer' ); ?>

@@ -210,15 +210,6 @@ function enqueue_digital_stylesheet()
 add_action('wp_enqueue_scripts', 'enqueue_digital_stylesheet');
 
 
-add_action('wp_enqueue_scripts', 'enqueue_google_maps_api');
-function enqueue_google_maps_api()
-{
-    if (!is_admin()) {
-        wp_enqueue_script('google-maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyD-YOe4j4bcSPO53h71D_NXDZwXYa8-kc8', array(), null, true);
-    }
-}
-
-
 add_action('init', 'locations_post_type');
 function locations_post_type()
 {
@@ -244,7 +235,7 @@ add_shortcode('google_maps_locations', 'google_maps_shortcode');
 function google_maps_shortcode($atts)
 {
     $atts = shortcode_atts(array(
-        'api_key' => 'AIzaSyDsFI_hZvdKk_VXf6YORSZaG-Oz2Amyy08'
+        'api_key' => '' // Remove hardcoded API key for security
     ), $atts);
 
     ob_start();
@@ -252,13 +243,20 @@ function google_maps_shortcode($atts)
     <div id="map-locations" style="height:500px"></div>
     <script>
         function initMapLocations() {
-            var mapLocations = new google.maps.Map(document.getElementById('map-locations'), {
-                zoom: 4,
-                center: {
-                    lat: 39.8283,
-                    lng: -98.5795
-                }
-            });
+            // Check if Google Maps API is available
+            if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
+                document.getElementById('map-locations').innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">Google Maps is currently unavailable. Please try again later.</div>';
+                return;
+            }
+            
+            try {
+                var mapLocations = new google.maps.Map(document.getElementById('map-locations'), {
+                    zoom: 4,
+                    center: {
+                        lat: 39.8283,
+                        lng: -98.5795
+                    }
+                });
 
             var locations = [
                 <?php
@@ -288,7 +286,7 @@ function google_maps_shortcode($atts)
             var infoWindow = new google.maps.InfoWindow();
             var markers = [];
 
-            locations.forEach(function(location) {
+            locations.forEach(function(location, index) {
                 geocoder.geocode({
                     address: location.address
                 }, function(results, status) {
@@ -306,12 +304,14 @@ function google_maps_shortcode($atts)
 
                         markers.push(marker);
 
-                        // If it's the first marker, or we randomly select it, open it on page load
+                        // If it's the first marker, open it on page load
                         if (index === 0) {
                             setTimeout(function() {
                                 google.maps.event.trigger(marker, 'click');
                             }, 1000);
                         }
+                    } else {
+                        console.log('Geocoding failed for ' + location.address + ': ' + status);
                     }
                 });
             });
@@ -322,6 +322,10 @@ function google_maps_shortcode($atts)
                     google.maps.event.trigger(markers[randomIndex], 'click');
                 }
             }, 2000);
+            } catch (error) {
+                console.error('Google Maps error:', error);
+                document.getElementById('map-locations').innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">Unable to load Google Maps. Please check your API key and billing settings.</div>';
+            }
         }
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -362,13 +366,20 @@ function google_maps_this_is_us_shortcode()
     <div id="map-this-is-us" style="height:500px"></div>
     <script>
         function initMapThisIsUs() {
-            var mapThisIsUs = new google.maps.Map(document.getElementById('map-this-is-us'), {
-                zoom: 4,
-                center: {
-                    lat: 39.8283,
-                    lng: -98.5795
-                }
-            });
+            // Check if Google Maps API is available
+            if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
+                document.getElementById('map-this-is-us').innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">Google Maps is currently unavailable. Please try again later.</div>';
+                return;
+            }
+            
+            try {
+                var mapThisIsUs = new google.maps.Map(document.getElementById('map-this-is-us'), {
+                    zoom: 4,
+                    center: {
+                        lat: 39.8283,
+                        lng: -98.5795
+                    }
+                });
 
             var locations = [
                 <?php
@@ -439,12 +450,14 @@ function google_maps_this_is_us_shortcode()
 
                         markers.push(marker);
 
-                        // If it's the first marker, or we randomly select it, open it on page load
+                        // If it's the first marker, open it on page load
                         if (index === 0) {
                             setTimeout(function() {
                                 google.maps.event.trigger(marker, 'click');
                             }, 1000);
                         }
+                    } else {
+                        console.log('Geocoding failed for ' + location.address + ': ' + status);
                     }
                 });
             });
@@ -456,6 +469,10 @@ function google_maps_this_is_us_shortcode()
                     google.maps.event.trigger(markers[randomIndex], 'click');
                 }
             }, 2000);
+            } catch (error) {
+                console.error('Google Maps error:', error);
+                document.getElementById('map-this-is-us').innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">Unable to load Google Maps. Please check your API key and billing settings.</div>';
+            }
         }
 
         document.addEventListener("DOMContentLoaded", function() {
