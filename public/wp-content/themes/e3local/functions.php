@@ -244,7 +244,7 @@ add_shortcode('google_maps_locations', 'google_maps_shortcode');
 function google_maps_shortcode($atts)
 {
     $atts = shortcode_atts(array(
-        'api_key' => 'AIzaSyD-YOe4j4bcSPO53h71D_NXDZwXYa8-kc8'
+        'api_key' => 'AIzaSyDsFI_hZvdKk_VXf6YORSZaG-Oz2Amyy08'
     ), $atts);
 
     ob_start();
