@@ -214,7 +214,7 @@ add_action('wp_enqueue_scripts', 'enqueue_google_maps_api');
 function enqueue_google_maps_api()
 {
     if (!is_admin()) {
-        wp_enqueue_script('google-maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyD-YOe4j4bcSPO53h71D_NXDZwXYa8-kc8', array(), null, true);
+        wp_enqueue_script('google-maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDsFI_hZvdKk_VXf6YORSZaG-Oz2Amyy08', array(), null, true);
     }
 }
 
