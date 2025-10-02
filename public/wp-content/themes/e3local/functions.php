@@ -255,7 +255,7 @@ function create_missing_elementor_css_files() {
     
     // Create directory if it doesn't exist
     if (!file_exists($elementor_css_dir)) {
-        wp_mkdir_p($elementor_css_dir);
+        wp_mkdir_p($elementor_css_dir); // 
     }
     
     // List of CSS files to create
