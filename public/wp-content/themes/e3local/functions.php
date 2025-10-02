@@ -57,11 +57,13 @@ function tailpress_enqueue_scripts()
     wp_enqueue_style('tailpress', tailpress_asset('css/output.css'), array(), $theme->get('Version'));
     wp_enqueue_script('tailpress', tailpress_asset('js/app.js'), array(), $theme->get('Version'));
 
-    // Register the stylesheet
-    wp_register_style('elementor-post-aloe', get_template_directory_uri() . '/css/elementor-post-411.css');
-
-    // Enqueue the stylesheet
-    wp_enqueue_style('elementor-post-aloe');
+    // Enqueue elementor-post-411.css
+    wp_enqueue_style(
+        'elementor-post-aloe',
+        get_template_directory_uri() . '/css/elementor-post-411.css',
+        array(),
+        filemtime(get_template_directory() . '/css/elementor-post-411.css')
+    );
 }
 
 add_action('wp_enqueue_scripts', 'tailpress_enqueue_scripts');
@@ -222,39 +224,92 @@ function enqueue_google_maps_api()
  * Enqueue Elementor CSS files to prevent 404 errors
  */
 function enqueue_elementor_css_files() {
-    // Enqueue post-6.css (Elementor Kit 6 styles)
-    wp_enqueue_style(
-        'elementor-post-6',
-        get_template_directory_uri() . '/css/post-6.css',
-        array(),
-        filemtime(get_template_directory() . '/css/post-6.css')
+    // List of Elementor CSS files that need to be enqueued
+    $elementor_css_files = array(
+        'post-6' => 'post-6.css',
+        'post-7' => 'post-7.css', 
+        'post-19' => 'post-19.css',
+        'post-177' => 'post-177.css'
     );
     
-    // Enqueue post-7.css (Elementor Page 7 styles)
-    wp_enqueue_style(
-        'elementor-post-7',
-        get_template_directory_uri() . '/css/post-7.css',
-        array(),
-        filemtime(get_template_directory() . '/css/post-7.css')
-    );
-    
-    // Enqueue post-19.css (placeholder to prevent 404)
-    wp_enqueue_style(
-        'elementor-post-19',
-        get_template_directory_uri() . '/css/post-19.css',
-        array(),
-        filemtime(get_template_directory() . '/css/post-19.css')
-    );
-    
-    // Enqueue post-177.css (placeholder to prevent 404)
-    wp_enqueue_style(
-        'elementor-post-177',
-        get_template_directory_uri() . '/css/post-177.css',
-        array(),
-        filemtime(get_template_directory() . '/css/post-177.css')
-    );
+    foreach ($elementor_css_files as $handle => $filename) {
+        $css_path = get_template_directory() . '/css/' . $filename;
+        if (file_exists($css_path)) {
+            wp_enqueue_style(
+                'elementor-' . $handle,
+                get_template_directory_uri() . '/css/' . $filename,
+                array(),
+                filemtime($css_path)
+            );
+        }
+    }
 }
 add_action('wp_enqueue_scripts', 'enqueue_elementor_css_files');
+
+/**
+ * Create missing Elementor CSS files in uploads directory
+ */
+function create_missing_elementor_css_files() {
+    $upload_dir = wp_upload_dir();
+    $elementor_css_dir = $upload_dir['basedir'] . '/elementor/css/';
+    
+    // Create directory if it doesn't exist
+    if (!file_exists($elementor_css_dir)) {
+        wp_mkdir_p($elementor_css_dir);
+    }
+    
+    // List of CSS files to create
+    $css_files = array(
+        'post-6.css' => get_template_directory() . '/css/post-6.css',
+        'post-7.css' => get_template_directory() . '/css/post-7.css',
+        'post-19.css' => get_template_directory() . '/css/post-19.css',
+        'post-177.css' => get_template_directory() . '/css/post-177.css'
+    );
+    
+    foreach ($css_files as $filename => $source_path) {
+        $target_path = $elementor_css_dir . $filename;
+        
+        // Only copy if source exists and target doesn't exist
+        if (file_exists($source_path) && !file_exists($target_path)) {
+            copy($source_path, $target_path);
+        }
+    }
+}
+add_action('init', 'create_missing_elementor_css_files');
+
+/**
+ * Handle Elementor CSS 404 errors by creating empty files
+ */
+function handle_elementor_css_404() {
+    // Hook into Elementor's CSS loading to prevent 404s
+    add_action('wp_enqueue_scripts', function() {
+        // Check if Elementor is trying to load CSS files that don't exist
+        $elementor_css_patterns = array(
+            'elementor-post-',
+            'elementor-frontend',
+            'elementor-global'
+        );
+        
+        // Add a filter to handle missing CSS files gracefully
+        add_filter('style_loader_src', function($src, $handle) {
+            // If it's an Elementor CSS file that might cause 404, return empty
+            if (strpos($handle, 'elementor-post-') === 0) {
+                $upload_dir = wp_upload_dir();
+                $elementor_css_dir = $upload_dir['basedir'] . '/elementor/css/';
+                $css_filename = str_replace('elementor-post-', 'post-', $handle) . '.css';
+                $css_path = $elementor_css_dir . $css_filename;
+                
+                if (!file_exists($css_path)) {
+                    // Create empty CSS file to prevent 404
+                    wp_mkdir_p($elementor_css_dir);
+                    file_put_contents($css_path, '/* Empty CSS file to prevent 404 errors */');
+                }
+            }
+            return $src;
+        }, 10, 2);
+    }, 1);
+}
+add_action('init', 'handle_elementor_css_404');
 
 /**
  * Add performance optimizations and error handling
