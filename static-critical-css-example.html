@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Critical CSS Implementation</title>
+    
+    <!-- Critical CSS Inlined for Fastest Loading -->
+    <style id="critical-elementor-css">
+        /* Critical Elementor CSS - Essential styles that must load immediately */
+        
+        /* Reset and base styles */
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        /* Container and layout */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        .py-12 {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+        
+        /* Typography */
+        .text-center {
+            text-align: center;
+        }
+        
+        .text-3xl {
+            font-size: 1.875rem;
+            line-height: 2.25rem;
+        }
+        
+        .text-4xl {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+        }
+        
+        .font-bold {
+            font-weight: 700;
+        }
+        
+        .text-gray-800 {
+            color: #1f2937;
+        }
+        
+        .text-gray-600 {
+            color: #4b5563;
+        }
+        
+        /* Spacing */
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+        
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+        
+        .mb-8 {
+            margin-bottom: 2rem;
+        }
+        
+        .mb-16 {
+            margin-bottom: 4rem;
+        }
+        
+        /* Flexbox */
+        .flex {
+            display: flex;
+        }
+        
+        .flex-row {
+            flex-direction: row;
+        }
+        
+        .gap-8 {
+            gap: 2rem;
+        }
+        
+        .justify-center {
+            justify-content: center;
+        }
+        
+        /* Grid */
+        .grid {
+            display: grid;
+        }
+        
+        .md\:grid-cols-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+        
+        /* Images */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .max-w-4xl {
+            max-width: 56rem;
+        }
+        
+        .w-full {
+            width: 100%;
+        }
+        
+        .rounded-2xl {
+            border-radius: 1rem;
+        }
+        
+        .rounded-3xl {
+            border-radius: 1.5rem;
+        }
+        
+        .shadow-2xl {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .shadow-lg {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .shadow-xl {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Backgrounds */
+        .bg-white {
+            background-color: #ffffff;
+        }
+        
+        /* Borders */
+        .border-l-4 {
+            border-left-width: 4px;
+        }
+        
+        .border-blue-500 {
+            border-color: #3b82f6;
+        }
+        
+        .border-green-500 {
+            border-color: #10b981;
+        }
+        
+        .border-purple-500 {
+            border-color: #8b5cf6;
+        }
+        
+        .border-indigo-500 {
+            border-color: #6366f1;
+        }
+        
+        /* Padding */
+        .p-8 {
+            padding: 2rem;
+        }
+        
+        .md\:p-12 {
+            padding: 3rem;
+        }
+        
+        /* Text colors */
+        .text-blue-500 {
+            color: #3b82f6;
+        }
+        
+        .text-green-500 {
+            color: #10b981;
+        }
+        
+        /* List styles */
+        .space-y-3 > * + * {
+            margin-top: 0.75rem;
+        }
+        
+        .space-y-6 > * + * {
+            margin-top: 1.5rem;
+        }
+        
+        .space-y-8 > * + * {
+            margin-top: 2rem;
+        }
+        
+        /* Flex items */
+        .items-start {
+            align-items: flex-start;
+        }
+        
+        /* Margin utilities */
+        .mr-3 {
+            margin-right: 0.75rem;
+        }
+        
+        /* Text sizes */
+        .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+        }
+        
+        .text-xl {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+        }
+        
+        .text-4xl {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+        }
+        
+        /* Responsive design */
+        @media (min-width: 768px) {
+            .md\:text-4xl {
+                font-size: 2.25rem;
+                line-height: 2.5rem;
+            }
+            
+            .md\:grid-cols-3 {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+            
+            .md\:p-12 {
+                padding: 3rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .lg\:flex-row {
+                flex-direction: row;
+            }
+            
+            .lg\:col-span-1 {
+                grid-column: span 1 / span 1;
+            }
+            
+            .lg\:col-span-2 {
+                grid-column: span 2 / span 2;
+            }
+        }
+        
+        /* Button styles */
+        .bg-blue-600 {
+            background-color: #2563eb;
+        }
+        
+        .hover\:bg-blue-700:hover {
+            background-color: #1d4ed8;
+        }
+        
+        .text-white {
+            color: #ffffff;
+        }
+        
+        .px-8 {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+        
+        .py-4 {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        
+        .rounded-full {
+            border-radius: 9999px;
+        }
+        
+        .inline-block {
+            display: inline-block;
+        }
+        
+        .transform {
+            transform: translateZ(0);
+        }
+        
+        .hover\:scale-105:hover {
+            transform: scale(1.05);
+        }
+        
+        .transition-all {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+        }
+        
+        .duration-300 {
+            transition-duration: 300ms;
+        }
+        
+        /* Hide elementor button */
+        .elementor-element-302811f1 .elementor-button {
+            display: none !important;
+        }
+        
+        /* Sticky positioning */
+        .sticky {
+            position: sticky;
+        }
+        
+        .top-8 {
+            top: 2rem;
+        }
+        
+        /* Custom gradient backgrounds */
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+        }
+        
+        .book-spine {
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+        }
+        
+        .book-spine:nth-child(2) { 
+            background: linear-gradient(90deg, #10b981, #059669); 
+        }
+        
+        .book-spine:nth-child(3) { 
+            background: linear-gradient(90deg, #ef4444, #dc2626); 
+        }
+        
+        .book-spine:nth-child(4) { 
+            background: linear-gradient(90deg, #3b82f6, #2563eb); 
+        }
+        
+        .book-spine:nth-child(5) { 
+            background: linear-gradient(90deg, #8b5cf6, #7c3aed); 
+        }
+        
+        .book-spine:nth-child(6) { 
+            background: linear-gradient(90deg, #f97316, #ea580c); 
+        }
+        
+        .book-spine:nth-child(7) { 
+            background: linear-gradient(90deg, #06b6d4, #0891b2); 
+        }
+        
+        .book-spine:nth-child(8) { 
+            background: linear-gradient(90deg, #84cc16, #65a30d); 
+        }
+        
+        .book-spine:nth-child(9) { 
+            background: linear-gradient(90deg, #ec4899, #db2777); 
+        }
+        
+        .book-spine:nth-child(10) { 
+            background: linear-gradient(90deg, #f59e0b, #d97706); 
+        }
+        
+        .book-spine:nth-child(11) { 
+            background: linear-gradient(90deg, #10b981, #047857); 
+        }
+        
+        .book-spine:nth-child(12) { 
+            background: linear-gradient(90deg, #6366f1, #4f46e5); 
+        }
+    </style>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
+    
+    <!-- Non-critical CSS loaded asynchronously -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"></noscript>
+</head>
+<body>
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12">
+        <!-- Hero Section with BuildLocal.jpg -->
+        <div class="text-center mb-16 pt-12">
+            <img src="https://anchor-up.s3.amazonaws.com/wp-content/uploads/2025/08/11213857/Be-Local-Hero.png" 
+                 alt="Build Local Church Relationships" 
+                 class="mx-auto max-w-4xl w-full rounded-2xl shadow-2xl">
+        </div>
+
+        <!-- Header Text Section -->
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+                A completely free, ready-to-use in-store display and book<br>
+                giveaway program focused on encouraging Christian unity.
+            </h2>
+        </div>
+
+        <!-- Second Section with Screenshot -->
+        <div class="text-center mb-16">
+            <img src="https://anchor-up.s3.amazonaws.com/wp-content/uploads/2025/08/11214040/books123.png" 
+                 alt="Be United in Christ Book Series" 
+                 class="mx-auto max-w-4xl w-full rounded-2xl shadow-2xl">
+        </div>
+
+        <!-- Program Details with Left Sidebar Image -->
+        <div class="flex flex-row lg:flex-row gap-8 mb-16 flex-nowrap justify-center">
+            <!-- Left Sidebar Image -->
+            <div class="lg:col-span-1">
+                <img src="https://anchor-up.s3.amazonaws.com/wp-content/uploads/2025/08/11213951/Bookshelf.png" 
+                     alt="Be United in Christ Book Series" 
+                     class="w-full h-auto rounded-2xl shadow-lg sticky top-8" style="max-height: 640px; width: auto;">
+            </div>
+
+            <!-- Right Content -->
+            <div class="lg:col-span-2 space-y-8">
+                <div class="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-blue-500">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">For Your Store</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-3 text-xl">•</span>
+                            A fully stocked, ready-to-display retail unit with 4 beautiful book sets
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-green-500">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">For Your Community</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-3 text-xl">•</span>
+                            4 additional gift sets for you to bless local churches
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-purple-500">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Each Church Set Includes</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-3 text-xl">•</span>
+                            A slipcase of inspiring books
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-3 text-xl">•</span>
+                            A heartfelt letter of encouragement
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-3 text-xl">•</span>
+                            A church supply catalog to drive store traffic
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-3 text-xl">•</span>
+                            A donation card for Be United in Christ (501(c)(3))
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-indigo-500">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Why Participate?</h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <div class="text-4xl mb-4">📚</div>
+                            <p class="text-lg text-gray-600">Enrich your store with meaningful content</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl mb-4">🤝</div>
+                            <p class="text-lg text-gray-600">Build lasting relationships with churches in your area</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl mb-4">✝️</div>
+                            <p class="text-lg text-gray-600">Be part of a movement promoting biblical unity</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Book Collection Display - Replaced with Screenshot -->
+        <div class="text-center mb-16">
+            <img src="https://anchor-up.s3.amazonaws.com/wp-content/uploads/2025/08/11214040/books123.png" 
+                 alt="Be United in Christ Book Series" 
+                 class="mx-auto max-w-4xl w-full rounded-2xl shadow-2xl">
+        </div>
+
+        <!-- Call to Action -->
+        <div class="text-center bg-white p-8 md:p-12 rounded-3xl shadow-xl mb-16">
+            <p class="text-lg text-gray-600 mb-8">
+                Limited quantities available — Don't miss this opportunity to equip, inspire, and make an eternal impact.
+            </p>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="bg-white p-8 md:p-12 rounded-3xl shadow-xl text-center mb-16">
+            <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Interested or Have Questions?</h3>
+            <p class="text-xl text-gray-600 mb-6">Get in touch with us for more information</p>
+            <a href="mailto:Rachel@anchordistributors.com" 
+               class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full text-lg font-semibold inline-block transform hover:scale-105 transition-all duration-300">
+                Email Rachel@anchordistributors.com
+            </a>
+        </div>
+    </main>
+
+    <!-- Optimized JavaScript with error handling -->
+    <script>
+        // Fix SVG path errors
+        document.addEventListener("DOMContentLoaded", function() {
+            const svgElements = document.querySelectorAll("svg path[d]");
+            svgElements.forEach(function(path) {
+                const d = path.getAttribute("d");
+                if (d && d.includes("616 0z")) {
+                    // Fix the problematic path
+                    path.setAttribute("d", d.replace("616 0z", "6 1 6 0z"));
+                }
+            });
+        });
+
+        // Safe event listener attachment
+        window.addEventListener("load", function() {
+            const main_navigation = document.querySelector("#primary-menu");
+            const menu_toggle = document.querySelector("#primary-menu-toggle");
+            
+            // Only add event listener if both elements exist
+            if (main_navigation && menu_toggle) {
+                menu_toggle.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    main_navigation.classList.toggle("hidden");
+                });
+            }
+        });
+
+        // Optimize YouTube iframe loading
+        function optimizeYouTubeEmbeds() {
+            const iframes = document.querySelectorAll('iframe[src*="youtube.com"]');
+            iframes.forEach(function(iframe) {
+                const src = iframe.getAttribute('src');
+                if (src && !src.includes('enablejsapi=1')) {
+                    const separator = src.includes('?') ? '&' : '?';
+                    iframe.setAttribute('src', src + separator + 'enablejsapi=1&origin=' + window.location.origin);
+                }
+            });
+        }
+
+        // Run optimization when DOM is ready
+        document.addEventListener("DOMContentLoaded", optimizeYouTubeEmbeds);
+    </script>
+
+    <!-- Load non-critical scripts asynchronously -->
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsFI_hZvdKk_VXf6YORSZaG-Oz2Amyy08&loading=async"></script>
+</body>
+</html>

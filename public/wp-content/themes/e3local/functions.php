@@ -214,9 +214,78 @@ add_action('wp_enqueue_scripts', 'enqueue_google_maps_api');
 function enqueue_google_maps_api()
 {
     if (!is_admin()) {
-        wp_enqueue_script('google-maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDsFI_hZvdKk_VXf6YORSZaG-Oz2Amyy08', array(), null, true);
+        wp_enqueue_script('google-maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDsFI_hZvdKk_VXf6YORSZaG-Oz2Amyy08&loading=async', array(), null, true);
     }
 }
+
+/**
+ * Enqueue Elementor CSS files to prevent 404 errors
+ */
+function enqueue_elementor_css_files() {
+    // Enqueue post-6.css (Elementor Kit 6 styles)
+    wp_enqueue_style(
+        'elementor-post-6',
+        get_template_directory_uri() . '/css/post-6.css',
+        array(),
+        filemtime(get_template_directory() . '/css/post-6.css')
+    );
+    
+    // Enqueue post-7.css (Elementor Page 7 styles)
+    wp_enqueue_style(
+        'elementor-post-7',
+        get_template_directory_uri() . '/css/post-7.css',
+        array(),
+        filemtime(get_template_directory() . '/css/post-7.css')
+    );
+    
+    // Enqueue post-19.css (placeholder to prevent 404)
+    wp_enqueue_style(
+        'elementor-post-19',
+        get_template_directory_uri() . '/css/post-19.css',
+        array(),
+        filemtime(get_template_directory() . '/css/post-19.css')
+    );
+    
+    // Enqueue post-177.css (placeholder to prevent 404)
+    wp_enqueue_style(
+        'elementor-post-177',
+        get_template_directory_uri() . '/css/post-177.css',
+        array(),
+        filemtime(get_template_directory() . '/css/post-177.css')
+    );
+}
+add_action('wp_enqueue_scripts', 'enqueue_elementor_css_files');
+
+/**
+ * Add performance optimizations and error handling
+ */
+function add_performance_optimizations() {
+    // Add async loading for Google Maps
+    add_filter('script_loader_tag', function($tag, $handle, $src) {
+        if ('google-maps' === $handle) {
+            return str_replace('<script ', '<script async ', $tag);
+        }
+        return $tag;
+    }, 10, 3);
+    
+    // Add error handling for SVG paths
+    add_action('wp_footer', function() {
+        echo '<script>
+        // Fix SVG path errors
+        document.addEventListener("DOMContentLoaded", function() {
+            const svgElements = document.querySelectorAll("svg path[d]");
+            svgElements.forEach(function(path) {
+                const d = path.getAttribute("d");
+                if (d && d.includes("616 0z")) {
+                    // Fix the problematic path
+                    path.setAttribute("d", d.replace("616 0z", "6 1 6 0z"));
+                }
+            });
+        });
+        </script>';
+    });
+}
+add_action('init', 'add_performance_optimizations');
 
 
 add_action('init', 'locations_post_type');
@@ -426,7 +495,7 @@ function google_maps_this_is_us_shortcode()
                             var videoUrlId = location.video_url_id;
 
                             var videoEmbed = videoUrlId ?
-                                '<iframe style="min-height:190px" width="250" height="140" src="https://www.youtube.com/embed/' + videoUrlId + '" frameborder="0" allowfullscreen></iframe><br>' :
+                                '<iframe style="min-height:190px" width="250" height="140" src="https://www.youtube.com/embed/' + videoUrlId + '?enablejsapi=1&origin=' + window.location.origin + '" frameborder="0" allowfullscreen></iframe><br>' :
                                 '';
 
                             infoWindow.setContent(
