@@ -143,6 +143,46 @@
             "append": ""
         },
         {
+            "key": "field_store_id_promo",
+            "label": "Your Store ID",
+            "name": "store_id",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "This is the ID Anchor provided you when you registered with Anchor Up Promotions",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_store_name_promo",
+            "label": "Your Store Name",
+            "name": "store_name",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_64dfbe1c7eae1",
             "label": "Anchor Up Checklist",
             "name": "anchor_up_checklist",
