@@ -282,11 +282,12 @@ body.rtl .elementor-19 .elementor-element.elementor-element-46433920 {
     line-height: 1em;
     letter-spacing: 0px;
     word-spacing: 0em;
+    white-space: nowrap;
     fill: #FFFFFF;
     color: #FFFFFF;
     border-style: none;
     border-radius: 100px 100px 100px 100px;
-    padding: 16px 45px 16px 45px;
+    padding: 16px 25px 16px 25px;
 }
 
 .elementor-19 .elementor-element.elementor-element-50c302e5.elementor-element {
@@ -585,7 +586,7 @@ body.rtl .elementor-19 .elementor-element.elementor-element-46433920 {
     }
 
     .elementor-19 .elementor-element.elementor-element-591d9ad0 {
-        --width: 413.172px;
+        --width: 513.172px;
     }
 
     .elementor-19 .elementor-element.elementor-element-302811f1 {
