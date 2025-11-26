@@ -230,31 +230,6 @@ get_header();
             </div>
         <?php } ?>
 
-        <!-- Local Christian Bookstore Promotional Content -->
-        <?php if ($local_christian_hero_banner || $local_christian_find_store_text || $local_christian_promotional_long_text) { ?>
-            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-8 border border-gray-100">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">Local Christian Bookstore Promotional Materials</h2>
-                
-                <?php if ($local_christian_hero_banner) { ?>
-                    <div class="mb-6">
-                        <img src="<?php echo esc_url($local_christian_hero_banner); ?>" 
-                             alt="Local Christian Bookstore Hero Banner" 
-                             class="w-full rounded-lg shadow-md">
-                    </div>
-                <?php } ?>
-                
-                <?php if ($local_christian_find_store_text) { ?>
-                    <p class="text-xl font-semibold text-gray-900 mb-4"><?php echo esc_html($local_christian_find_store_text); ?></p>
-                <?php } ?>
-                
-                <?php if ($local_christian_promotional_long_text) { ?>
-                    <div class="prose prose-lg max-w-none">
-                        <?php echo wp_kses_post($local_christian_promotional_long_text); ?>
-                    </div>
-                <?php } ?>
-            </div>
-        <?php } ?>
-
         <!-- Digital Assets Section -->
         <div id="digital-assets" class="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-8 border border-gray-100">
             <div class="flex items-center gap-3 mb-6">

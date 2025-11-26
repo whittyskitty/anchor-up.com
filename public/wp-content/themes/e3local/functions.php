@@ -593,3 +593,105 @@ function google_maps_this_is_us_shortcode()
 // Require Anchor Up Promotion functions and hooks
 require_once(__DIR__ . '/includes/template_functions/anchor-up-promotion-functions.php');
 require_once(__DIR__ . '/includes/classes/AnchorUpPromotionHooks.php');
+
+/**
+ * Send WordPress password reset emails via SendGrid
+ */
+add_filter('retrieve_password_notification_email', 'anchor_up_send_password_reset_via_sendgrid', 10, 4);
+function anchor_up_send_password_reset_via_sendgrid($defaults, $key, $user_login, $user_data) {
+    // Only proceed if SendGrid function is available
+    if (!function_exists('anchor_up_sendgrid_send_email')) {
+        return $defaults;
+    }
+    
+    // Get SendGrid template ID for password reset
+    $template_id = '';
+    if (function_exists('anchor_up_get_sendgrid_template_id')) {
+        $template_id = anchor_up_get_sendgrid_template_id('wordpress-password-reset');
+    }
+    
+    // If no template ID configured, try stw_config
+    if (empty($template_id) && function_exists('stw_config')) {
+        $template_id = stw_config('sendgrid-template-mapping.wordpress-password-reset');
+    }
+    
+    // If still no template ID, return defaults to use wp_mail
+    if (empty($template_id)) {
+        error_log('SendGrid Password Reset: No template ID configured, falling back to wp_mail');
+        return $defaults;
+    }
+    
+    // Extract reset URL from message
+    $reset_url = '';
+    $message = isset($defaults['message']) ? $defaults['message'] : '';
+    
+    // Parse the reset URL from the message
+    // WordPress format: network_site_url('wp-login.php?login=' . rawurlencode($user_login) . "&key=$key&action=rp", 'login')
+    if (preg_match('/wp-login\.php\?[^\s]+/', $message, $matches)) {
+        $reset_url = network_site_url($matches[0], 'login');
+    } else {
+        // Fallback: construct the URL manually
+        $reset_url = network_site_url('wp-login.php?login=' . rawurlencode($user_login) . '&key=' . $key . '&action=rp', 'login');
+    }
+    
+    // Get site name
+    if (is_multisite()) {
+        $site_name = get_network()->site_name;
+    } else {
+        $site_name = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
+    }
+    
+    // Get from email and name
+    $from_email = get_option('admin_email');
+    $from_name = $site_name;
+    
+    // Try to get from Store() if available
+    if (function_exists('Store')) {
+        $store = Store();
+        if ($store) {
+            if (method_exists($store, 'send_as_email') && !empty($store->send_as_email)) {
+                $from_email = $store->send_as_email;
+            } elseif (isset($store->send_as_email) && !empty($store->send_as_email)) {
+                $from_email = $store->send_as_email;
+            }
+            
+            if (method_exists($store, 'send_as_name') && !empty($store->send_as_name)) {
+                $from_name = $store->send_as_name;
+            } elseif (isset($store->send_as_name) && !empty($store->send_as_name)) {
+                $from_name = $store->send_as_name;
+            }
+        }
+    }
+    
+    // Prepare SendGrid template data
+    $template_data = [
+        'reset_url' => $reset_url,
+        'user_login' => $user_login,
+        'site_name' => $site_name,
+        'user_email' => $user_data->user_email,
+        'display_name' => $user_data->display_name,
+    ];
+    
+    // Send email via SendGrid
+    $result = anchor_up_sendgrid_send_email(
+        $from_email,
+        $from_name,
+        $user_data->user_email,
+        $template_id,
+        $template_data
+    );
+    
+    if ($result === false) {
+        error_log('SendGrid Password Reset: Failed to send email, falling back to wp_mail');
+        return $defaults;
+    }
+    
+    // Return empty message to prevent wp_mail from sending
+    // WordPress will still show success message to user
+    return [
+        'to' => $user_data->user_email,
+        'subject' => $defaults['subject'],
+        'message' => '', // Empty message prevents wp_mail
+        'headers' => '',
+    ];
+}

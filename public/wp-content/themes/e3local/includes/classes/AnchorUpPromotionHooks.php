@@ -16,6 +16,7 @@ function anchor_up_get_sendgrid_template_id($template_key) {
         'connection-plus-admin-onboard-form' => 'd-8424a6f04a504ad3bf23fbf413a73339',
         'connection-plus-admin-initial-register-form' => 'd-9a8983f0ef794bfc9a6e6c59b2323b18',
         'anchor-up-foot-traffic-registration' => 'd-829d9a79a4ed441a843f386d95373c04',
+        'wordpress-password-reset' => '', // Add your SendGrid template ID here
     ];
     
     // Try stw_config first
