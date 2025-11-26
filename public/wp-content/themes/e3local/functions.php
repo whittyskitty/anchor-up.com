@@ -589,3 +589,7 @@ function google_maps_this_is_us_shortcode()
 <?php
     return ob_get_clean();
 }
+
+// Require Anchor Up Promotion functions and hooks
+require_once(__DIR__ . '/includes/template_functions/anchor-up-promotion-functions.php');
+require_once(__DIR__ . '/includes/classes/AnchorUpPromotionHooks.php');
