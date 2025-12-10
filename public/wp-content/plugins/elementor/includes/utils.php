@@ -1,6 +1,7 @@
 <?php
 namespace Elementor;
 
+use Elementor\Core\Files\Fonts\Google_Font;
 use Elementor\Core\Utils\Collection;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -105,7 +106,10 @@ class Utils {
 	const IMAGE_CAROUSEL = 'image_carousel';
 
 	/**
-	 * Is WP CLI.
+	 * Whether WordPress CLI mode is enabled or not.
+	 *
+	 * @access public
+	 * @static
 	 *
 	 * @return bool
 	 */
@@ -114,26 +118,35 @@ class Utils {
 	}
 
 	/**
-	 * Is script debug.
-	 *
 	 * Whether script debug is enabled or not.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 * @static
 	 *
-	 * @return bool True if it's a script debug is active, false otherwise.
+	 * @return bool
 	 */
 	public static function is_script_debug() {
 		return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
 	}
 
+	/**
+	 * Whether Elementor debug is enabled or not.
+	 *
+	 * @access public
+	 * @static
+	 *
+	 * @return bool
+	 */
 	public static function is_elementor_debug() {
 		return defined( 'ELEMENTOR_DEBUG' ) && ELEMENTOR_DEBUG;
 	}
 
 	/**
-	 * Whether elementor test mode is enabled or not.
+	 * Whether Elementor test mode is enabled or not.
+	 *
+	 * @access public
+	 * @static
 	 *
 	 * @return bool
 	 */
@@ -182,11 +195,11 @@ class Utils {
 	 * @static
 	 * @access public
 	 *
-	 * @param $from
-	 * @param $to
+	 * @param string $from
+	 * @param string $to
 	 *
 	 * @return string
-	 * @throws \Exception
+	 * @throws \Exception If URLs are missing or invalid URLs provided.
 	 */
 	public static function replace_urls( $from, $to ) {
 		$from = trim( $from );
@@ -234,6 +247,7 @@ class Utils {
 		$rows_affected += (int) apply_filters( 'elementor/tools/replace-urls', 0, $from, $to );
 
 		Plugin::$instance->files_manager->clear_cache();
+		Google_Font::clear_cache();
 
 		return sprintf(
 			/* translators: %d: Number of rows. */
@@ -430,7 +444,7 @@ class Utils {
 	 * @deprecated 3.3.0 Use `Plugin::$instance->documents->get_create_new_post_url()` instead.
 	 * @static
 	 *
-	 * @param string $post_type Optional. Post type slug. Default is 'page'.
+	 * @param string      $post_type Optional. Post type slug. Default is 'page'.
 	 * @param string|null $template_type Optional. Query arg 'template_type'. Default is null.
 	 *
 	 * @return string A URL for creating new post using Elementor.
@@ -499,12 +513,12 @@ class Utils {
 	 * @access public
 	 * @static
 	 */
-	public static function array_inject( $array, $key, $insert ) {
-		$length = array_search( $key, array_keys( $array ), true ) + 1;
+	public static function array_inject( $base_array, $key, $insert ) {
+		$length = array_search( $key, array_keys( $base_array ), true ) + 1;
 
-		return array_slice( $array, 0, $length, true ) +
+		return array_slice( $base_array, 0, $length, true ) +
 			$insert +
-			array_slice( $array, $length, null, true );
+			array_slice( $base_array, $length, null, true );
 	}
 
 	/**
@@ -567,9 +581,10 @@ class Utils {
 	 * Add Elementor Config js vars to the relevant script handle,
 	 * WP will wrap it with <script> tag.
 	 * To make sure this script runs thru the `script_loader_tag` hook, use a known handle value.
+	 *
 	 * @param string $handle
 	 * @param string $js_var
-	 * @param mixed $config
+	 * @param mixed  $config
 	 */
 	public static function print_js_config( $handle, $js_var, $config ) {
 		$config = wp_json_encode( $config );
@@ -601,7 +616,7 @@ class Utils {
 	/**
 	 * Checks a control value for being empty, including a string of '0' not covered by PHP's empty().
 	 *
-	 * @param mixed $source
+	 * @param mixed       $source
 	 * @param bool|string $key
 	 *
 	 * @return bool
@@ -625,10 +640,10 @@ class Utils {
 	/**
 	 * Convert HTMLEntities to UTF-8 characters
 	 *
-	 * @param $string
+	 * @param string $html_string
 	 * @return string
 	 */
-	public static function urlencode_html_entities( $string ) {
+	public static function urlencode_html_entities( $html_string ) {
 		$entities_dictionary = [
 			'&#145;' => "'", // Opening single quote
 			'&#146;' => "'", // Closing single quote
@@ -643,9 +658,9 @@ class Utils {
 		];
 
 		// Decode decimal entities
-		$string = str_replace( array_keys( $entities_dictionary ), array_values( $entities_dictionary ), $string );
+		$html_string = str_replace( array_keys( $entities_dictionary ), array_values( $entities_dictionary ), $html_string );
 
-		return rawurlencode( html_entity_decode( $string, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
+		return rawurlencode( html_entity_decode( $html_string, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
 	}
 
 	/**
@@ -720,8 +735,8 @@ class Utils {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @param $menu_slug
-	 * @param $new_label
+	 * @param string $menu_slug
+	 * @param string $new_label
 	 * @access public
 	 */
 	public static function change_submenu_first_item_label( $menu_slug, $new_label ) {
@@ -758,8 +773,8 @@ class Utils {
 	/**
 	 * Print internal content (not user input) without escaping.
 	 */
-	public static function print_unescaped_internal_string( $string ) {
-		echo $string; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	public static function print_unescaped_internal_string( $internal_string ) {
+		echo $internal_string; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -786,7 +801,7 @@ class Utils {
 		return new \WP_Query( $args );
 	}
 
-	public static function print_wp_kses_extended( $string, array $tags ) {
+	public static function print_wp_kses_extended( $text, array $tags ) {
 		$allowed_html = wp_kses_allowed_html( 'post' );
 
 		foreach ( $tags as $tag ) {
@@ -796,7 +811,7 @@ class Utils {
 			}
 		}
 
-		echo wp_kses( $string, $allowed_html );
+		echo wp_kses( $text, $allowed_html );
 	}
 
 	public static function is_elementor_path( $path ) {
@@ -822,15 +837,14 @@ class Utils {
 	}
 
 	/**
-	 * @param $file
-	 * @param mixed ...$args
+	 * @param string $file
+	 * @param mixed  ...$args
 	 * @return false|string
 	 */
 	public static function file_get_contents( $file, ...$args ) {
 		if ( ! is_file( $file ) || ! is_readable( $file ) ) {
 			return false;
 		}
-
 		return file_get_contents( $file, ...$args );
 	}
 
@@ -839,7 +853,7 @@ class Utils {
 			return null;
 		}
 
-		if ( $_FILES === $super_global ) {
+		if ( $_FILES === $super_global ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return isset( $super_global[ $key ]['name'] ) ?
 				self::sanitize_file_name( $super_global[ $key ] ) :
 				self::sanitize_multi_upload( $super_global[ $key ] );
@@ -863,19 +877,19 @@ class Utils {
 	/**
 	 * Return specific object property value if exist from array of keys.
 	 *
-	 * @param $array
-	 * @param $keys
-	 * @return key|false
+	 * @param array $base_array
+	 * @param array $keys
+	 * @return mixed|null
 	 */
-	public static function get_array_value_by_keys( $array, $keys ) {
+	public static function get_array_value_by_keys( $base_array, $keys ) {
 		$keys = (array) $keys;
 		foreach ( $keys as $key ) {
-			if ( ! isset( $array[ $key ] ) ) {
+			if ( ! isset( $base_array[ $key ] ) ) {
 				return null;
 			}
-			$array = $array[ $key ];
+			$base_array = $base_array[ $key ];
 		}
-		return $array;
+		return $base_array;
 	}
 
 	public static function get_cached_callback( $callback, $cache_key, $cache_time = 24 * HOUR_IN_SECONDS ) {
@@ -893,8 +907,8 @@ class Utils {
 	}
 
 	public static function is_sale_time(): bool {
-		$sale_start_time = gmmktime( 13, 0, 0, 11, 26, 2024 );
-		$sale_end_time = gmmktime( 9, 59, 0, 12, 4, 2024 );
+		$sale_start_time = gmmktime( 12, 0, 0, 11, 25, 2025 );
+		$sale_end_time = gmmktime( 3, 59, 0, 12, 3, 2025 );
 
 		$now_time = gmdate( 'U' );
 
@@ -906,7 +920,7 @@ class Utils {
 			return;
 		}
 
-		throw new \Exception( $message );
+		throw new \Exception( esc_html( $message ) );
 	}
 
 	public static function has_invalid_post_permissions( $post ): bool {
@@ -926,5 +940,21 @@ class Utils {
 			&& ! current_user_can( 'edit_post', $post->ID );
 
 		return $is_private || $not_allowed || $password_required;
+	}
+
+	public static function is_custom_kit_applied() {
+		return (bool) Plugin::$instance->kits_manager->get_previous_id();
+	}
+
+	public static function decode_string( string $encoded_string, ?string $fallback = '' ) {
+		try {
+			return base64_decode( $encoded_string, true ) ?? $fallback;
+		} catch ( \Exception $e ) {
+			return $fallback;
+		}
+	}
+
+	public static function encode_string( string $decoded_string ): string {
+		return base64_encode( $decoded_string );
 	}
 }

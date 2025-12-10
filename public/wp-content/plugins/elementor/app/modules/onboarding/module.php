@@ -6,12 +6,13 @@ use Elementor\Core\Base\Module as BaseModule;
 use Elementor\Core\Common\Modules\Ajax\Module as Ajax;
 use Elementor\Core\Common\Modules\Connect\Apps\Library;
 use Elementor\Core\Files\Uploads_Manager;
+use Elementor\Includes\EditorAssetsAPI;
 use Elementor\Plugin;
 use Elementor\Utils;
 use Plugin_Upgrader;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 /**
@@ -26,6 +27,8 @@ class Module extends BaseModule {
 	const VERSION = '1.0.0';
 	const ONBOARDING_OPTION = 'elementor_onboarded';
 
+	private ?API $editor_assets_api = null;
+
 	/**
 	 * Get name.
 	 *
@@ -36,6 +39,45 @@ class Module extends BaseModule {
 	 */
 	public function get_name() {
 		return 'onboarding';
+	}
+
+	private function is_theme_selection_experiment_enabled() {
+		$editor_assets_api = $this->get_editor_assets_api();
+
+		if ( null === $editor_assets_api ) {
+			return false;
+		}
+
+		return $editor_assets_api->is_theme_selection_experiment_enabled();
+	}
+
+	private function is_good_to_go_experiment_enabled() {
+		$editor_assets_api = $this->get_editor_assets_api();
+
+		if ( null === $editor_assets_api ) {
+			return false;
+		}
+
+		return $editor_assets_api->is_good_to_go_experiment_enabled();
+	}
+
+	private function get_editor_assets_api(): ?API {
+		if ( null !== $this->editor_assets_api ) {
+			return $this->editor_assets_api;
+		}
+
+		$editor_assets_api_instance = new EditorAssetsAPI( $this->get_editor_assets_api_config() );
+		$this->editor_assets_api = new API( $editor_assets_api_instance );
+
+		return $this->editor_assets_api;
+	}
+
+	private function get_editor_assets_api_config(): array {
+		return [
+			EditorAssetsAPI::ASSETS_DATA_URL => 'https://assets.elementor.com/ab-testing/v1/ab-testing.json',
+			EditorAssetsAPI::ASSETS_DATA_TRANSIENT_KEY => '_elementor_ab_testing_data',
+			EditorAssetsAPI::ASSETS_DATA_KEY => 'ab-testing',
+		];
 	}
 
 	/**
@@ -82,7 +124,14 @@ class Module extends BaseModule {
 			'siteName' => esc_html( $site_name ),
 			'isUnfilteredFilesEnabled' => Uploads_Manager::are_unfiltered_uploads_enabled(),
 			'urls' => [
-				'kitLibrary' => Plugin::$instance->app->get_base_url() . '#/kit-library?order[direction]=desc&order[by]=featuredIndex',
+				'kitLibrary' => Plugin::$instance->app->get_base_url() . '&source=onboarding#/kit-library?order[direction]=desc&order[by]=featuredIndex',
+				'sitePlanner' => add_query_arg( [
+					'type' => 'editor',
+					'siteUrl' => esc_url( home_url() ),
+					'siteName' => esc_html( $site_name ),
+					'siteDescription' => esc_html( get_bloginfo( 'description' ) ),
+					'siteLanguage' => get_locale(),
+				], 'https://planner.elementor.com/onboarding.html' ),
 				'createNewPage' => Plugin::$instance->documents->get_create_new_post_url(),
 				'connect' => $library->get_admin_url( 'authorize', [
 					'utm_source' => 'onboarding-wizard',
@@ -113,7 +162,9 @@ class Module extends BaseModule {
 				'downloadPro' => '?utm_source=onboarding-wizard&utm_campaign=my-account-subscriptions&utm_medium=wp-dash&utm_content=import-pro-plugin&utm_term=' . self::VERSION,
 			],
 			'nonce' => wp_create_nonce( 'onboarding' ),
-			'experiment' => Plugin::$instance->experiments->is_feature_active( 'e_onboarding' ),
+			'experiment' => true,
+			'themeSelectionExperimentEnabled' => $this->is_theme_selection_experiment_enabled(),
+			'goodToGoExperimentEnabled' => $this->is_good_to_go_experiment_enabled(),
 		] );
 	}
 
@@ -257,7 +308,7 @@ class Module extends BaseModule {
 	private function maybe_upload_logo_image() {
 		$error_message = esc_html__( 'There was a problem uploading your file.', 'elementor' );
 
-		$file = Utils::get_super_global_value( $_FILES, 'fileToUpload' );
+		$file = Utils::get_super_global_value( $_FILES, 'fileToUpload' ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( ! is_array( $file ) || empty( $file['type'] ) ) {
@@ -318,7 +369,13 @@ class Module extends BaseModule {
 			return $this->get_permission_error_response();
 		}
 
-		switch_theme( 'hello-elementor' );
+		$theme_slug = Utils::get_super_global_value( $_POST, 'theme_slug' ) ?? 'hello-biz'; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$allowed_themes = [ 'hello-elementor', 'hello-biz' ];
+		if ( ! in_array( $theme_slug, $allowed_themes, true ) ) {
+			$theme_slug = 'hello-biz';
+		}
+
+		switch_theme( $theme_slug );
 
 		return [
 			'status' => 'success',
@@ -342,7 +399,7 @@ class Module extends BaseModule {
 
 		$error_message = esc_html__( 'There was a problem uploading your file.', 'elementor' );
 
-		$file = Utils::get_super_global_value( $_FILES, 'fileToUpload' ) ?? [];
+		$file = Utils::get_super_global_value( $_FILES, 'fileToUpload' ) ?? []; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( ! is_array( $file ) || empty( $file['type'] ) ) {
@@ -412,9 +469,8 @@ class Module extends BaseModule {
 	 * Maybe Handle Ajax
 	 *
 	 * This method checks if there are any AJAX actions being
-	 * @since 3.6.0
 	 *
-	 * @return array|null
+	 * @since 3.6.0
 	 */
 	private function maybe_handle_ajax() {
 		$result = [];

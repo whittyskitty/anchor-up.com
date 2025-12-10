@@ -3,7 +3,6 @@ namespace Elementor\Core\Admin;
 
 use Elementor\Api;
 use Elementor\Beta_Testers;
-use Elementor\Core\Admin\Menu\Main as MainMenu;
 use Elementor\App\Modules\Onboarding\Module as Onboarding_Module;
 use Elementor\Core\Base\App;
 use Elementor\Core\Upgrade\Manager as Upgrade_Manager;
@@ -167,11 +166,9 @@ class Admin extends App {
 	 * @access public
 	 */
 	public function enqueue_styles() {
-		$direction_suffix = is_rtl() ? '-rtl' : '';
-
 		wp_register_style(
 			'elementor-admin',
-			$this->get_css_assets_url( 'admin' . $direction_suffix ),
+			$this->get_css_assets_url( 'admin' ),
 			[
 				'elementor-common',
 			],
@@ -511,7 +508,7 @@ class Admin extends App {
 	 * Fired by `elementor_dashboard_overview_widget` function.
 	 *
 	 * @param array $args
-	 * @param bool $show_heading
+	 * @param bool  $show_heading
 	 *
 	 * @return void
 	 * @since 3.12.0
@@ -547,7 +544,7 @@ class Admin extends App {
 	 * Displays the Elementor dashboard widget - news and updates section.
 	 * Fired by `elementor_dashboard_overview_widget` function.
 	 *
-	 * @param int $limit_feed
+	 * @param int  $limit_feed
 	 * @param bool $show_heading
 	 *
 	 * @return void
@@ -719,7 +716,7 @@ class Admin extends App {
 			wp_die( $document ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
-		wp_redirect( $document->get_edit_url() );
+		wp_safe_redirect( $document->get_edit_url() );
 
 		die;
 	}
@@ -768,7 +765,7 @@ class Admin extends App {
 	}
 
 	public function enqueue_new_floating_elements_scripts() {
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$suffix = Utils::is_script_debug() ? '' : '.min';
 
 		wp_enqueue_script(
 			'elementor-floating-elements-modal',
@@ -785,7 +782,7 @@ class Admin extends App {
 	 * @access public
 	 */
 	public function enqueue_new_template_scripts() {
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$suffix = Utils::is_script_debug() ? '' : '.min';
 
 		wp_enqueue_script(
 			'elementor-new-template',
@@ -810,7 +807,7 @@ class Admin extends App {
 	 * @access public
 	 */
 	public function enqueue_beta_tester_scripts() {
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$suffix = Utils::is_script_debug() ? '' : '.min';
 
 		wp_enqueue_script(
 			'elementor-beta-tester',
@@ -1037,7 +1034,7 @@ class Admin extends App {
 				'dismiss' => __( 'Dismiss this notice.', 'elementor' ),
 				'button_event' => $dismissible,
 				'button_data' => base64_encode(
-					json_encode( [
+					wp_json_encode( [
 						'action_url' => Hints::get_plugin_action_url( 'image-optimization' ),
 					] ),
 				),
@@ -1050,6 +1047,25 @@ class Admin extends App {
 	public function register_ajax_hints( $ajax_manager ) {
 		$ajax_manager->register_ajax_action( 'elementor_image_optimization_campaign', [ $this, 'ajax_set_image_optimization_campaign' ] );
 		$ajax_manager->register_ajax_action( 'elementor_core_site_mailer_campaign', [ $this, 'ajax_site_mailer_campaign' ] );
+		$ajax_manager->register_ajax_action( 'elementor_core_ally_campaign', [ $this, 'ajax_ally_campaign' ] );
+	}
+
+	public function ajax_ally_campaign( $request ) {
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			return;
+		}
+
+		if ( empty( $request['source'] ) ) {
+			return;
+		}
+
+		$campaign_data = [
+			'source' => sanitize_key( $request['source'] ),
+			'campaign' => 'ally-plg',
+			'medium' => 'wp-dash',
+		];
+
+		set_transient( 'elementor_ea11y_campaign', $campaign_data, 30 * DAY_IN_SECONDS );
 	}
 
 	public function ajax_set_image_optimization_campaign( $request ) {

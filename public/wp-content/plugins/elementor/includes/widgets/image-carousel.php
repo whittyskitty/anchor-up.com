@@ -92,8 +92,43 @@ class Widget_Image_Carousel extends Widget_Base {
 		return [ 'e-swiper', 'widget-image-carousel' ];
 	}
 
+	/**
+	 * Get script dependencies.
+	 *
+	 * Retrieve the list of script dependencies the widget requires.
+	 *
+	 * @since 3.27.0
+	 * @access public
+	 *
+	 * @return array Widget script dependencies.
+	 */
+	public function get_script_depends(): array {
+		return [ 'swiper' ];
+	}
+
 	public function has_widget_inner_wrapper(): bool {
 		return ! Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
+	/**
+	 * Get widget upsale data.
+	 *
+	 * Retrieve the widget promotion data.
+	 *
+	 * @since 3.18.0
+	 * @access protected
+	 *
+	 * @return array Widget promotion data.
+	 */
+	protected function get_upsale_data() {
+		return [
+			'condition' => ! Utils::has_pro(),
+			'image' => esc_url( ELEMENTOR_ASSETS_URL . 'images/go-pro.svg' ),
+			'image_alt' => esc_attr__( 'Upgrade', 'elementor' ),
+			'description' => esc_html__( 'Gain complete freedom to design every slide with Elementor"s Pro Carousel.', 'elementor' ),
+			'upgrade_url' => esc_url( 'https://go.elementor.com/go-pro-image-carousel-widget/' ),
+			'upgrade_text' => esc_html__( 'Upgrade Now', 'elementor' ),
+		];
 	}
 
 	/**
@@ -383,16 +418,6 @@ class Widget_Image_Carousel extends Widget_Base {
 				],
 			]
 		);
-
-		if ( ! Utils::has_pro() ) {
-			$this->add_control(
-				Utils::IMAGE_CAROUSEL . '_promotion',
-				[
-					'label' => esc_html__( 'Carousel PRO widget', 'elementor' ),
-					'type' => Promotion_Control::TYPE,
-				]
-			);
-		}
 
 		$this->end_controls_section();
 
@@ -1039,7 +1064,7 @@ class Widget_Image_Carousel extends Widget_Base {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param array $attachment
+	 * @param array  $attachment
 	 * @param object $instance
 	 *
 	 * @return array|string|false An array/string containing the attachment URL, or false if no link.

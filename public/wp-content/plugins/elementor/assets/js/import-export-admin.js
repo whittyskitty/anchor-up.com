@@ -1,17 +1,5 @@
-/*! elementor - v3.26.0 - 22-12-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
-
-/***/ "@wordpress/i18n":
-/*!**************************!*\
-  !*** external "wp.i18n" ***!
-  \**************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = wp.i18n;
-
-/***/ }),
 
 /***/ "../node_modules/@babel/runtime/helpers/classCallCheck.js":
 /*!****************************************************************!*\
@@ -136,6 +124,17 @@ function _typeof(o) {
 }
 module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
+/***/ }),
+
+/***/ "@wordpress/i18n":
+/*!**************************!*\
+  !*** external "wp.i18n" ***!
+  \**************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = wp.i18n;
+
 /***/ })
 
 /******/ 	});
@@ -165,7 +164,7 @@ module.exports = _typeof, module.exports.__esModule = true, module.exports["defa
 /******/ 	}
 /******/ 	
 /************************************************************************/
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 (() => {
 "use strict";
 /*!*******************************************************!*\
@@ -267,7 +266,7 @@ var Admin = /*#__PURE__*/function () {
       elementorCommon.dialogsManager.createWidget('confirm', {
         headerMessage: __('Are you sure?', 'elementor'),
         // Translators: %s is the name of the active Kit
-        message: __('Removing %s will permanently delete changes made to the Kit\'s content and site settings', 'elementor').replace('%s', this.activeKitName),
+        message: __('Removing %s will permanently delete changes made to the Websites Template\'s content and site settings', 'elementor').replace('%s', this.activeKitName),
         strings: {
           confirm: __('Delete', 'elementor'),
           cancel: __('Cancel', 'elementor')
@@ -294,10 +293,10 @@ var Admin = /*#__PURE__*/function () {
       }
       if (0 === referrerKitId.length) {
         this.createKitDeletedWidget({
-          message: __('Try a different Kit or build your site from scratch.', 'elementor'),
+          message: __('Try a different Website Template or build your site from scratch.', 'elementor'),
           strings: {
             confirm: __('OK', 'elementor'),
-            cancel: __('Kit Library', 'elementor')
+            cancel: __('Library', 'elementor')
           },
           onCancel: function onCancel() {
             location.href = elementorImportExport.appUrl;

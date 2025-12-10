@@ -182,43 +182,47 @@ $generated_i18n_strings = array(
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/ElasticEmail.vue:17
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/MailerSend.vue:18
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Mailgun.vue:23
+	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/SparkPost.vue:18
 	__( 'From Name', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/ElasticEmail.vue:18
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/MailerSend.vue:19
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Mailgun.vue:24
+	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/SparkPost.vue:19
 	__( 'Force From Name', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/ElasticEmail.vue:19
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/MailerSend.vue:20
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Mailgun.vue:25
-	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Outlook.vue:27
+	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/SparkPost.vue:20
 	__( 'From Email', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/ElasticEmail.vue:20
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/MailerSend.vue:21
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Mailgun.vue:26
-	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Outlook.vue:29
+	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/SparkPost.vue:21
 	__( 'Force From Email', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/ElasticEmail.vue:21
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/MailerSend.vue:22
+	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/SparkPost.vue:22
 	__( 'If enabled, the From Name setting above will be used for all emails, ignoring values set by other plugins.', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/ElasticEmail.vue:22
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/MailerSend.vue:23
-	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Outlook.vue:30
+	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/SparkPost.vue:23
 	__( 'If enabled, the From Email setting above will be used for all emails, ignoring values set by other plugins.', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/ElasticEmail.vue:23
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/MailerSend.vue:24
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Mailgun.vue:29
+	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/SparkPost.vue:24
 	__( 'The name that emails are sent from.', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/ElasticEmail.vue:24
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/MailerSend.vue:25
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Mailgun.vue:30
-	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Outlook.vue:28
+	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/SparkPost.vue:25
 	__( 'The email address that emails are sent from.', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Postmark.vue:27
@@ -229,10 +233,10 @@ $generated_i18n_strings = array(
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/ElasticEmail.vue:13
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/MailerSend.vue:13
+	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/SparkPost.vue:14
 	__( 'API Key', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Sendgrid.vue:14
-	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Sendinblue.vue:14
 	__( 'Sending Domain', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Sendgrid.vue:16
@@ -386,6 +390,7 @@ $generated_i18n_strings = array(
 	__( 'Secret Access Key', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Mailgun.vue:16
+	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/SparkPost.vue:15
 	__( 'Region', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/AmazonSES.vue:19
@@ -441,7 +446,6 @@ $generated_i18n_strings = array(
 	__( 'Read how to set up SendLayer', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/WizardStepLicense.vue:82
-	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Outlook.vue:138
 	__( 'Verification Error!', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Gmail.vue:24
@@ -451,23 +455,18 @@ $generated_i18n_strings = array(
 	__( 'Gmail mailer requires a valid Easy WP SMTP Pro license. Please activate your license key.', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/WizardStepLicense.vue:36
-	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Outlook.vue:41
 	__( 'Paste your license key here', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/WizardStepLicense.vue:35
-	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Outlook.vue:42
 	__( 'License key input', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/WizardStepLicense.vue:26
-	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Outlook.vue:43
 	__( 'Verify License Key', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/WizardStepLicense.vue:27
-	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Outlook.vue:44
 	__( 'The License Key format is incorrect. Please enter a valid key and try again.', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/WizardStepLicense.vue:72
-	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Outlook.vue:128
 	__( 'Successful Verification!', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Outlook.vue:129
@@ -490,7 +489,7 @@ $generated_i18n_strings = array(
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/SmtpCom.vue:28
 	__( 'Read how to set up SMTP.com', 'easy-wp-smtp' ),
 
-	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/SmtpCom.vue:29
+	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Sendinblue.vue:29
 	__( 'Transparency and Disclosure', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/SmtpCom.vue:31
@@ -666,9 +665,11 @@ $generated_i18n_strings = array(
 	__( 'Read how to set up Mailgun', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Mailgun.vue:36
+	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/SparkPost.vue:31
 	__( 'US', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/Mailgun.vue:40
+	// Reference: src/modules/setup-wizard/components/steps/configure-mailer/SparkPost.vue:35
 	__( 'EU', 'easy-wp-smtp' ),
 
 	// Reference: src/modules/setup-wizard/components/TheWizardHeader.vue:8
@@ -681,7 +682,6 @@ $generated_i18n_strings = array(
 	// Reference: src/modules/settings/components/input/SettingsInputRadiosWithIcons.vue:14
 	__( 'Recommended', 'easy-wp-smtp' ),
 
-	// Reference: src/modules/settings/components/input/SettingsInputNumber.vue:64
 	// Reference: src/modules/settings/components/input/SettingsInputRadio.vue:33
 	// Reference: src/modules/settings/components/input/SettingsInputSwitch.vue:38
 	// Reference: src/modules/settings/components/input/SettingsInputText.vue:69

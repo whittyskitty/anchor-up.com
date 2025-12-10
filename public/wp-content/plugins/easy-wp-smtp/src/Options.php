@@ -30,6 +30,7 @@ class Options {
 			'from_name',
 			'from_email',
 			'mailer',
+			'return_path',
 			'from_name_force',
 			'from_email_force',
 			'from_email_force_exclude_emails',
@@ -257,6 +258,7 @@ class Options {
 				'from_email'       => get_option( 'admin_email' ),
 				'from_name'        => get_bloginfo( 'name' ),
 				'mailer'           => 'mail',
+				'return_path'      => true,
 				'from_email_force' => true,
 				'from_name_force'  => false,
 			],
@@ -516,6 +518,10 @@ class Options {
 					case 'mailer':
 						/** No inspection comment @noinspection PhpUndefinedConstantInspection */
 						$return = $this->is_const_defined( $group, $key ) ? EASY_WP_SMTP_MAILER : $value;
+						break;
+					case 'return_path':
+						/** No inspection comment @noinspection PhpUndefinedConstantInspection */
+						$return = $this->is_const_defined( $group, $key ) ? EASY_WP_SMTP_SET_RETURN_PATH : $value;
 						break;
 					case 'from_name_force':
 						/** No inspection comment @noinspection PhpUndefinedConstantInspection */
@@ -967,6 +973,9 @@ class Options {
 					case 'mailer':
 						$return = defined( 'EASY_WP_SMTP_MAILER' ) && EASY_WP_SMTP_MAILER;
 						break;
+					case 'return_path':
+						$return = defined( 'EASY_WP_SMTP_SET_RETURN_PATH' ) && ( EASY_WP_SMTP_SET_RETURN_PATH === 'true' || EASY_WP_SMTP_SET_RETURN_PATH === true );
+						break;
 					case 'from_name_force':
 						$return = defined( 'EASY_WP_SMTP_MAIL_FROM_NAME_FORCE' ) && ( EASY_WP_SMTP_MAIL_FROM_NAME_FORCE === 'true' || EASY_WP_SMTP_MAIL_FROM_NAME_FORCE === true );
 						break;
@@ -1387,6 +1396,7 @@ class Options {
 									);
 								}
 								break;
+							case 'return_path':
 							case 'from_name_force':
 							case 'from_email_force':
 							case 'reply_to_replace_from':

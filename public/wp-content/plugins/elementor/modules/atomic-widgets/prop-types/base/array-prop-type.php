@@ -2,6 +2,7 @@
 
 namespace Elementor\Modules\AtomicWidgets\PropTypes\Base;
 
+use Elementor\Modules\AtomicWidgets\PropDependencies\Manager as Dependency_Manager;
 use Elementor\Modules\AtomicWidgets\PropTypes\Concerns;
 use Elementor\Modules\AtomicWidgets\PropTypes\Contracts\Transformable_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Contracts\Prop_Type;
@@ -13,14 +14,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 abstract class Array_Prop_Type implements Transformable_Prop_Type {
 	const KIND = 'array';
 
-	use Concerns\Has_Default,
-		Concerns\Has_Generate,
-		Concerns\Has_Meta,
-		Concerns\Has_Required_Setting,
-		Concerns\Has_Settings,
-		Concerns\Has_Transformable_Validation;
+	use Concerns\Has_Default;
+	use Concerns\Has_Generate;
+	use Concerns\Has_Meta;
+	use Concerns\Has_Required_Setting;
+	use Concerns\Has_Settings;
+	use Concerns\Has_Transformable_Validation;
 
 	protected Prop_Type $item_type;
+
+	private ?array $dependencies = null;
 
 	public function __construct() {
 		$this->item_type = $this->define_item_type();
@@ -31,6 +34,10 @@ abstract class Array_Prop_Type implements Transformable_Prop_Type {
 	 */
 	public static function make() {
 		return new static();
+	}
+
+	public function get_type(): string {
+		return 'array';
 	}
 
 	/**
@@ -75,16 +82,41 @@ abstract class Array_Prop_Type implements Transformable_Prop_Type {
 		return true;
 	}
 
+	public function sanitize( $value ) {
+		$value['value'] = $this->sanitize_value( $value['value'] );
+
+		return $value;
+	}
+
+	public function sanitize_value( $value ) {
+		$prop_type = $this->get_item_type();
+
+		return array_map( function ( $item ) use ( $prop_type ) {
+			return $prop_type->sanitize( $item );
+		}, $value );
+	}
+
 	public function jsonSerialize(): array {
 		return [
 			'kind' => static::KIND,
 			'key' => static::get_key(),
 			'default' => $this->get_default(),
-			'meta' => $this->get_meta(),
-			'settings' => $this->get_settings(),
+			'meta' => (object) $this->get_meta(),
+			'settings' => (object) $this->get_settings(),
 			'item_prop_type' => $this->get_item_type(),
+			'dependencies' => $this->get_dependencies(),
 		];
 	}
 
 	abstract protected function define_item_type(): Prop_Type;
+
+	public function set_dependencies( ?array $dependencies ): self {
+		$this->dependencies = empty( $dependencies ) ? null : $dependencies;
+
+		return $this;
+	}
+
+	public function get_dependencies(): ?array {
+		return $this->dependencies;
+	}
 }

@@ -122,7 +122,7 @@ class Role_Manager extends Settings_Page {
 						}
 						$this->display_role_controls( $role_slug, $role_data );
 					}
-					submit_button();
+					submit_button( __( 'Save Changes', 'elementor' ), 'primary', 'submit', true, [ 'data-id' => 'elementor-role-manager-button-save-changes' ] );
 					?>
 				</form>
 			</div>
@@ -242,7 +242,6 @@ class Role_Manager extends Settings_Page {
 		];
 
 		return Filtered_Promotions_Manager::get_filtered_promotion_data( $promotion, 'elementor/role/custom_promotion', 'upgrade_url' );
-
 	}
 
 	/**

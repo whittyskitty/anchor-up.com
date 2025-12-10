@@ -1,11 +1,11 @@
 === Elementor Website Builder - More Than Just a Page Builder ===
 Contributors: elemntor
 Tags: page builder, editor, landing page, drag-and-drop, elementor,
-Requires at least: 6.3
-Tested up to: 6.7
+Requires at least: 6.6
+Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.26.3
-Beta tag: 3.26.0-beta5
+Stable tag: 3.33.4
+Beta tag: 3.34.0-beta1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -15,11 +15,13 @@ The Elementor Website Builder has it all: drag and drop page builder, pixel perf
 
 https://www.youtube.com/watch?v=le72grP_Q6k
 
-= THE #1 NO CODE DRAG & DROP WORDPRESS WEBSITE BUILDER POWERING OVER 17M WEBSITES WORLDWIDE, NOW WITH AI. =
+= THE #1 NO CODE DRAG & DROP WORDPRESS WEBSITE BUILDER POWERING OVER 18M WEBSITES WORLDWIDE, NOW WITH AI. =
 
 Elementor, the leading WordPress website creation platform, empowers you to build professional, pixel-perfect websites seamlessly.
 
 Unlock all features with [Elementor Pro](https://go.elementor.com/wp-repo-description-tab-elementor-pro-pro-features/).
+
+Need fast and secure cloud hosting for your Elementor site? Try out **[Elementor Hosting](https://elemn.to/repo-hosting)** Powered by Google Cloud & Cloudflare. 4.9/5 TrustPilot score.
 
 ### 🌟 Create Professional Stunning Websites
 
@@ -255,7 +257,7 @@ Join a global community that helps each other achieve their goals.
 
 = Minimum Requirements =
 
-* WordPress 6.3 or greater
+* WordPress 6.5 or greater
 * PHP version 7.4 or greater
 * MySQL version 5.0 or greater
 
@@ -305,11 +307,11 @@ It works with almost all the plugins. If you experience an incompatibility issue
 
 No! Elementor provides you with all the widgets and features that you need to build a professional website without using code.
 
-**Do i need to know how to design?**
+**Do I need to know how to design?**
 
 No, you can choose between professionally designed kits and templates that fit toevery industry and have all you need to create your own professional website.
 
-**Will elementor slow down my website?**
+**Will Elementor slow down my website?**
 
 As Elementor prioritizes speed and performance, you enjoy better and faster performance with each new version of Elementor. When testing the same page layout on older versions you can see a significant performance improvement, from a score of 82 in Google PageSpeed Insight in version 3.1, to a score of 95 i in version 3.5.
 
@@ -347,56 +349,37 @@ You can also add a new language via [translate.wordpress.org](https://go.element
 
 == Changelog ==
 
-= 3.26.3 - 2024-12-22 =
+= 3.33.4 - 2025-12-08 =
 
-* Tweak: Registered `swiper.js` script to ensure Swiper is properly declared and loaded ([#29612](https://github.com/elementor/elementor/issues/29612), [#29616](https://github.com/elementor/elementor/issues/29616))
+* Security Fix: Improved code security enforcement in Text Path widget
 
-= 3.26.2 - 2024-12-19 =
+= 3.33.3 - 2025-12-04 =
 
-* Fix: Reverted Activated "Element Caching" feature for existing sites ([#27502](https://github.com/elementor/elementor/issues/29613))
-* Fix: Compatibility issue with third-party plugin with `data-settings` attribute missing when Optimized Markup experiment is activated
+* Fix: Improved compatibility with WordPress 6.9
+* Fix: Keyboard navigation does not work as expected when setting a CSS ID in Tabs widget
 
-= 3.26.1 - 2024-12-19
+= 3.33.2 - 2025-11-23 =
 
-* Tweak: Return a specific error to users when images provider is not working in Elementor AI
-* Fix: Typo in `Isolation Manager`
+* Security Fix: Improved code security enforcement in repeater widgets
+* Security Fix: Improved code security enforcement in Star Rating widget
+* Fix: Editor not loading with errors in the console in certain scenarios – Editor V4
 
-= 3.26.0 - 2024-12-16 =
+= 3.33.1 - 2025-11-17 =
 
-* New: Unify product images seamlessly with AI
-* Tweak: Added "Space Between Dots" control to Image Carousel widget ([#2526](https://github.com/elementor/elementor/issues/2526), [#3277](https://github.com/elementor/elementor/issues/3277), [#21697](https://github.com/elementor/elementor/issues/21697))
-* Tweak: Added paragraph spacing control in Text Editor widget ([#25431](https://github.com/elementor/elementor/issues/25431), [#20144](https://github.com/elementor/elementor/issues/20144))
-* Tweak: Added hover and transition color controls for a link in Heading widget ([#12877](https://github.com/elementor/elementor/issues/12877))
-* Tweak: Updated Image Spacing control to support only PX units in Image Carousel widget ([#21827](https://github.com/elementor/elementor/issues/21827))
-* Tweak: Created CSS variables for Row and Column gaps value in Container ([#24178](https://github.com/elementor/elementor/issues/24178))
-* Tweak: Added the ability to set `aria-label` in Image Carousel widget ([#28355](https://github.com/elementor/elementor/issues/28355))
-* Tweak: Replaced the Wrap Align Content select control with a choose control in Container ([#22640](https://github.com/elementor/elementor/issues/22640))
-* Tweak: Implemented accessibility improvements for pagination bullets in Image Carousel widget ([#28674](https://github.com/elementor/elementor/issues/28674))
-* Tweak: Replaced hidden `elementor-screen-only` div with `aria-label` attributes
-* Tweak: Improved behavior and messaging for the warning displayed when navigating between documents
-* Tweak: Load Nested Elements styles only when they are in use
-* Tweak: Added support for rendering Gutenberg blocks on the frontend
-* Tweak: Removed `elementor-widget-container` div from Elementor widgets as part of the Optimized Markup experiment
-* Tweak: Updated CSS to utilize `inset` CSS logical property in various locations
-* Tweak: Updated minimum required Safari version to 15.5
-* Tweak: Transition Duration controls are displayed only when a background color is set
-* Tweak: Transition Duration controls are displayed only when a border is set
-* Tweak: Improved keyboard accessibility for the section and container presets area
-* Tweak: Merged "Upgrade Swiper Library" feature to version
-* Tweak: Merged "Optimized Control Loading" feature to version
-* Tweak: Activated "Element Caching" feature for existing sites
-* Tweak: Promoted "Nested Elements" feature to Stable status
-* Tweak: Removed `elementor/core/schemes`
-* Fix: Container Gap values not transferring correctly between sites when using Cross-site Copy and Paste ([#24111](https://github.com/elementor/elementor/issues/24111), [#28343](https://github.com/elementor/elementor/issues/28343))
-* Fix: Removed anchor scroll warnings from the console ([#29199](https://github.com/elementor/elementor/issues/29199), [#29350](https://github.com/elementor/elementor/issues/29350))
-* Fix: Frontend template rendering is broken with fatal error ([#29582](https://github.com/elementor/elementor/issues/29582), [#29579](https://github.com/elementor/elementor/issues/29579))
-* Fix: PHP error log appearing due to the Usage Data Sharing cron job (([#29153](https://github.com/elementor/elementor/issues/29153))
-* Fix: Deprecated `print_emoji_styles` warning in Theme Builder screen ([#27502](https://github.com/elementor/elementor/issues/27502))
-* Fix: Display Condition feature is available without an active Elementor license in Floating Elements
-* Fix: "Generate with Elementor AI" button is missing in the Media Library list mode
-* Fix: Resized file size exceeding the maximum limit does not display an error in AI Image
-* Fix: Images from URL incorrectly open the Generate modal
-* Fix: Dropdown area is not opening correctly in certain scenarios in Menu widget
-* Fix: Swiper styling missing from Lightbox inside Gallery widgets
+* Security Fix: Improved code security enforcement in Floating Elements
+
+= 3.33.0 - 2025-11-10 =
+
+* New: Introducing Variables Manager to manage design variables like colors, fonts, and sizes from a centralized panel - Editor V4
+* New: Introducing Blend Mode control to create layered visual effects by defining how elements blend with backgrounds - Editor V4
+* New: Introducing Background Clipping control to define where an element's background is rendered across the element's layout - Editor V4
+* Tweak: Updated Editor Top Bar layout and button placement for improved navigation
+* Tweak: Adjusted default cache behavior to inactive and updated FAQ Schema notice in Accordion widget
+* Tweak: Improved error handling in Import and Export customization flow
+* Tweak: Applied CSS logical properties support in Star Rating widget
+* Tweak: Enhanced accessibility in Star Rating widget
+* Tweak: Updated minimum supported versions for Chrome, Firefox, and Safari
+* Fix: Child pages and menu items not importing correctly in Website Templates
+* Fix: Deprecated `utf8_encode()` and `utf8_decode()` functions replaced for PHP 8.2 compatibility ([#27499](https://github.com/elementor/elementor/issues/27499))
 
 [See changelog for all versions.](https://go.elementor.com/full-changelog/)

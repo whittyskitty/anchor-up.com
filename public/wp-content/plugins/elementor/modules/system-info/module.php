@@ -157,7 +157,7 @@ class Module extends BaseModule {
 				<h3 class="wp-heading-inline"><?php echo esc_html__( 'System Info', 'elementor' ); ?></h3>
 				<form action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" method="post">
 					<input type="hidden" name="action" value="elementor_system_info_download_file">
-					<input type="submit" class="button button-primary" value="<?php echo esc_attr__( 'Download System Info', 'elementor' ); ?>">
+					<input type="submit" data-id="elementor-system-info-download-file" class="button button-primary" value="<?php echo esc_attr__( 'Download System Info', 'elementor' ); ?>">
 				</form>
 			</div>
 			<div><?php $this->print_report( $reports, 'html' ); ?></div>
@@ -181,7 +181,7 @@ class Module extends BaseModule {
 			<hr>
 			<form action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" method="post">
 				<input type="hidden" name="action" value="elementor_system_info_download_file">
-				<input type="submit" class="button button-primary" value="<?php echo esc_attr__( 'Download System Info', 'elementor' ); ?>">
+				<input type="submit" data-id="elementor-system-info-download-file" class="button button-primary" value="<?php echo esc_attr__( 'Download System Info', 'elementor' ); ?>">
 			</form>
 		</div>
 		<?php
@@ -281,9 +281,8 @@ class Module extends BaseModule {
 	 *
 	 * @return \WP_Error|false|Base Base instance if the report was created,
 	 *                                       False or WP_Error otherwise.
-	 *@since 2.9.0
+	 * @since 2.9.0
 	 * @access public
-	 *
 	 */
 	public function create_reporter( array $properties ) {
 		$properties = Model_Helper::prepare_properties( $this->get_settings( 'reporter_properties' ), $properties );
