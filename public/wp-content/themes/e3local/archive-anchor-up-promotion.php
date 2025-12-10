@@ -143,7 +143,7 @@ if (!$current_promotion) {
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                     </svg>
                                 </a>
-                                <a href="/register" 
+                                <a href=/anchor-up-website-registration/"" 
                                    class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow-xl">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
@@ -207,7 +207,7 @@ if (!$current_promotion) {
                                 <p class="text-gray-700">Register now to participate in exciting promotional campaigns!</p>
                             </div>
                         </div>
-                        <a href="/register" 
+                        <a href="/anchor-up-website-registration" 
                            class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow-xl whitespace-nowrap">
                             Register Now
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -226,7 +226,31 @@ if (!$current_promotion) {
                 </svg>
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">No Upcoming Promotions</h2>
                 <p class="text-xl text-gray-600 mb-2">Check back soon for new promotions!</p>
-                <p class="text-lg text-gray-500">Take a look at our past promotions below.</p>
+                <p class="text-lg text-gray-500 mb-8">Take a look at our past promotions below.</p>
+            </div>
+
+            <!-- Call to Action for Registration (when no promotions) -->
+            <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl shadow-lg p-6 mb-8 border-2 border-green-200">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-green-500 rounded-full p-3">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-1">Want to join the In & Out Store Promotions?</h3>
+                            <p class="text-gray-700">Register now to participate in exciting promotional campaigns!</p>
+                        </div>
+                    </div>
+                    <a href="/anchor-up-promotion-registration" 
+                       class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow-xl whitespace-nowrap">
+                        Register Now
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
             </div>
         <?php } ?>
 
@@ -444,7 +468,7 @@ if (!$current_promotion) {
                     <p class="text-gray-700 mb-4">
                         <strong>Don't have a store ID?</strong> Register for the program now!
                     </p>
-                    <a href="/register" 
+                    <a href="/anchor-up-website-registration" 
                        class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-md hover:shadow-lg">
                         Register Now
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

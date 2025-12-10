@@ -637,7 +637,7 @@ function anchor_up_promotion_handle_register_form_submission($entry, $form) {
     delete_option('_transient_stw.airtable.anchor_up_foot_traffic_stores');
 }
 
-// Connection Plus - Official On-Boarding Form
+// Anchor Up - Official Onboarding Form
 add_action('init', 'anchor_up_promotion_setup_website_onboarding_form_hook');
 function anchor_up_promotion_setup_website_onboarding_form_hook() {
     // Check if Gravity Forms is active
@@ -645,7 +645,7 @@ function anchor_up_promotion_setup_website_onboarding_form_hook() {
         return;
     }
     
-    $on_boarding_form_id = RGFormsModel::get_form_id("Connection Plus - Official On-Boarding");
+    $on_boarding_form_id = RGFormsModel::get_form_id("Anchor Up - Official Onboarding");
     
     if (!$on_boarding_form_id) {
         return;

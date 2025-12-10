@@ -116,14 +116,14 @@ get_header();
                 <?php
                 // Get form ID by name
                 if (class_exists('RGFormsModel')) {
-                    $website_form_id = RGFormsModel::get_form_id("Connection Plus - Official On-Boarding");
+                    $website_form_id = RGFormsModel::get_form_id("Anchor Up - Official Onboarding");
                     
                     if ($website_form_id) {
                         // Display the form
                         gravity_form($website_form_id, true, true, false, null, true);
                     } else {
                         echo '<div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">';
-                        echo '<p class="text-yellow-800">Form "Connection Plus - Official On-Boarding" not found. Please ensure the form exists in Gravity Forms.</p>';
+                        echo '<p class="text-yellow-800">Form "Anchor Up - Official Onboarding" not found. Please ensure the form exists in Gravity Forms.</p>';
                         echo '</div>';
                     }
                 } else {
