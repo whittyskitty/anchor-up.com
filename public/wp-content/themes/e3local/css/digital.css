@@ -43683,11 +43683,11 @@ section[data-section-id="65667114f0851760cfef54ac"]>.content-wrapper,section[dat
 }
 
 .header-nav-item a {
-    font-family: 'Tonos-Regular'
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
 }
 
 header#header a.btn {
-    font-family: 'Tonos-Bold' !important;
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
     font-size: calc((1.5 - 2) * 1.5vw + 1rem) !important
 }
 
@@ -43696,65 +43696,29 @@ h1 strong {
     font-weight: normal
 }
 
-@font-face {
-    font-family: 'Tonos-Bold';
-    src: url('https://static1.squarespace.com/static/6532b7085e3deb3580f13659/t/656904a87ddf4362133b2c94/1701381288341/Tonos-Regular.ttf')
-}
-
 h1 {
-    font-family: 'Tonos-Bold'
-}
-
-h1 {
-    font-family: 'Tonos-Bold';
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     font-size: 55pt;
     letter-spacing: -1px;
     line-height: 119%
 }
 
-@font-face {
-    font-family: 'Tonos-Regular';
-    src: url('https://static1.squarespace.com/static/6532b7085e3deb3580f13659/t/656904a87ddf4362133b2c94/1701381288341/Tonos-Regular.ttf')
-}
-
 h2 {
-    font-family: 'Tonos-Regular'
-}
-
-h2 {
-    font-family: 'Tonos-Regular';
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     font-size: 33pt;
     letter-spacing: -.5px;
     line-height: 120%
 }
 
-@font-face {
-    font-family: 'Tonos-Regular';
-    src: url('https://static1.squarespace.com/static/6532b7085e3deb3580f13659/t/656904a87ddf4362133b2c94/1701381288341/Tonos-Regular.ttf')
-}
-
 h4 {
-    font-family: 'Tonos-Regular'
-}
-
-h4 {
-    font-family: 'Tonos-Bold';
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     font-size: 40pt;
     letter-spacing: -.9px;
     line-height: 100%
 }
 
-@font-face {
-    font-family: 'Tonos-Bold';
-    src: url('https://static1.squarespace.com/static/6532b7085e3deb3580f13659/t/6568fb26bb3d0a7e8cd916d0/1701378854776/Tonos-Bold.ttf')
-}
-
 h3 {
-    font-family: 'Tonos-Bold'
-}
-
-h3 {
-    font-family: 'Tonos-Bold';
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     font-size: 22pt;
     letter-spacing: -1px;
     line-height: 110%
