@@ -9,9 +9,16 @@
 global $post;
 $post_id = $post->ID;
 
+// Call acf_form_head() early to handle form submissions - must be before get_header()
+if (function_exists('acf_form_head')) {
+    acf_form_head();
+}
+
 // Get all custom fields
 $promotion_header_image = get_field('promotion_header_image', $post_id);
 $promotion_description = get_field('promotion_description', $post_id);
+$start_store_sign_up_date = get_field('start_store_sign_up_date', $post_id);
+$end_store_sign_up_date = get_field('end_store_sign_up_date', $post_id);
 $promotion_start_date = get_field('promotion_start_date', $post_id);
 $promotion_end_date = get_field('promotion_end_date', $post_id);
 $marketing_start_date = get_field('marketing_to_anchor_up_stores_start_date', $post_id);
@@ -53,16 +60,40 @@ get_header();
                  class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             <div class="absolute bottom-0 left-0 right-0 p-8 md:p-12">
-                <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">
-                    <?php the_title(); ?>
-                </h1>
-                <?php if ($promotion_start_date && $promotion_end_date) { ?>
-                    <div class="flex flex-wrap gap-4 text-white text-lg">
-                        <span class="bg-blue-600/80 px-4 py-2 rounded-lg backdrop-blur-sm">
-                            📅 <?php echo esc_html($promotion_start_date); ?> - <?php echo esc_html($promotion_end_date); ?>
-                        </span>
+                <div class="flex items-end justify-between flex-wrap gap-4">
+                    <div>
+                        <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+                            <?php the_title(); ?>
+                        </h1>
+                        <?php if ($promotion_start_date && $promotion_end_date) { ?>
+                            <div class="flex flex-wrap gap-4 text-white text-lg">
+                                <span class="bg-blue-600/80 px-4 py-2 rounded-lg backdrop-blur-sm">
+                                    📅 <?php echo esc_html($promotion_start_date); ?> - <?php echo esc_html($promotion_end_date); ?>
+                                </span>
+                            </div>
+                        <?php } ?>
                     </div>
-                <?php } ?>
+                    <?php
+                    // Check if we're within the sign-up date range
+                    $is_within_signup_period = false;
+                    if ($start_store_sign_up_date && $end_store_sign_up_date) {
+                        $today = strtotime(date('Ymd'));
+                        $signup_start = strtotime($start_store_sign_up_date);
+                        $signup_end = strtotime($end_store_sign_up_date);
+                        $is_within_signup_period = ($today >= $signup_start && $today <= $signup_end);
+                    }
+                    
+                    if ($is_within_signup_period) {
+                    ?>
+                        <button onclick="openSignupModal()" 
+                                class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all shadow-lg hover:shadow-xl backdrop-blur-sm">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Sign Up for This Promotion
+                        </button>
+                    <?php } ?>
+                </div>
             </div>
         </div>
     <?php } else { ?>
@@ -71,6 +102,28 @@ get_header();
                 <h1 class="text-4xl md:text-6xl font-bold mb-4"><?php the_title(); ?></h1>
                 <?php if ($promotion_start_date && $promotion_end_date) { ?>
                     <p class="text-xl md:text-2xl"><?php echo esc_html($promotion_start_date); ?> - <?php echo esc_html($promotion_end_date); ?></p>
+                <?php } ?>
+                <?php
+                // Check if we're within the sign-up date range
+                $is_within_signup_period = false;
+                if ($start_store_sign_up_date && $end_store_sign_up_date) {
+                    $today = strtotime(date('Ymd'));
+                    $signup_start = strtotime($start_store_sign_up_date);
+                    $signup_end = strtotime($end_store_sign_up_date);
+                    $is_within_signup_period = ($today >= $signup_start && $today <= $signup_end);
+                }
+                
+                if ($is_within_signup_period) {
+                ?>
+                    <div class="mt-6">
+                        <button onclick="openSignupModal()" 
+                                class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all shadow-lg hover:shadow-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Sign Up for This Promotion
+                        </button>
+                    </div>
                 <?php } ?>
             </div>
         </div>
@@ -124,6 +177,26 @@ get_header();
 
             <!-- Key Information Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                <?php if ($start_store_sign_up_date) { ?>
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 border border-blue-200">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="text-2xl">📝</span>
+                            <h3 class="font-semibold text-gray-900">Store Sign Up Start</h3>
+                        </div>
+                        <p class="text-gray-700 text-lg font-medium"><?php echo esc_html($start_store_sign_up_date); ?></p>
+                    </div>
+                <?php } ?>
+                
+                <?php if ($end_store_sign_up_date) { ?>
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-5 border border-purple-200">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="text-2xl">⏰</span>
+                            <h3 class="font-semibold text-gray-900">Store Sign Up End</h3>
+                        </div>
+                        <p class="text-gray-700 text-lg font-medium"><?php echo esc_html($end_store_sign_up_date); ?></p>
+                    </div>
+                <?php } ?>
+                
                 <?php if ($promotion_start_date) { ?>
                     <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-5 border border-green-200">
                         <div class="flex items-center gap-3 mb-2">
@@ -229,6 +302,85 @@ get_header();
                 ?>
             </div>
         <?php } ?>
+
+        <!-- Sign Up For This Promotion Section -->
+        <div id="sign-up-promotion" class="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-8 border border-gray-100">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Sign Up For This Promotion</h2>
+            </div>
+
+            <?php
+            // Check if we're within the sign-up date range
+            $is_within_signup_period = false;
+            if ($start_store_sign_up_date && $end_store_sign_up_date) {
+                $today = strtotime(date('Ymd'));
+                $signup_start = strtotime($start_store_sign_up_date);
+                $signup_end = strtotime($end_store_sign_up_date);
+                $is_within_signup_period = ($today >= $signup_start && $today <= $signup_end);
+            }
+            
+            if ($is_within_signup_period) {
+                // Check if user has already signed up for this promotion
+                $existing_signup_id = null;
+                if (class_exists('\STW\AnchorUp\AnchorUp')) {
+                    $anchor_account_number = \STW\AnchorUp\AnchorUp::getAnchorAccountNumber();
+                    if ($anchor_account_number) {
+                        $signup_query = new WP_Query(array(
+                            'post_type' => 'promo-signup',
+                            'posts_per_page' => 1,
+                            'meta_query' => array(
+                                'relation' => 'AND',
+                                array(
+                                    'key' => 'specific_signup_anchor_customer_number',
+                                    'value' => $anchor_account_number,
+                                    'compare' => '=',
+                                ),
+                                array(
+                                    'key' => 'specific_signup_promotion_relationship',
+                                    'value' => $post_id,
+                                    'compare' => '=',
+                                ),
+                            ),
+                            'fields' => 'ids',
+                        ));
+                        
+                        if ($signup_query->have_posts()) {
+                            $existing_signup_id = $signup_query->posts[0];
+                        }
+                        wp_reset_postdata();
+                    }
+                }
+            ?>
+                <div class="text-center py-8">
+                    <p class="text-gray-700 mb-6">Sign up to participate in this promotion. Your information will be pre-filled automatically.</p>
+                    <button onclick="openSignupModal()" 
+                            class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all shadow-lg hover:shadow-xl">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <?php echo $existing_signup_id ? "Update" : "Sign Up"; ?> for This Promotion
+                    </button>
+                </div>
+            <?php
+            } else {
+            ?>
+                <div class="text-center py-8">
+                    <div class="bg-gray-100 rounded-lg p-6 inline-block">
+                        <p class="text-gray-600 text-lg font-semibold">Sign Up Promotion Window has Ended</p>
+                        <?php if ($start_store_sign_up_date && $end_store_sign_up_date) { ?>
+                            <p class="text-gray-500 text-sm mt-2">Sign-up period: <?php echo esc_html($start_store_sign_up_date); ?> - <?php echo esc_html($end_store_sign_up_date); ?></p>
+                        <?php } ?>
+                    </div>
+                </div>
+            <?php
+            }
+            ?>
+        </div>
 
         <!-- Digital Assets Section -->
         <div id="digital-assets" class="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-8 border border-gray-100">
@@ -400,6 +552,131 @@ get_header();
     </div>
 </div>
 
+<!-- Sign Up Modal -->
+<div id="signupModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onclick="closeSignupModal()"></div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-2xl font-bold text-gray-900" id="modal-title">
+                        <?php
+                        // Check if user has already signed up
+                        $modal_existing_signup_id = null;
+                        if (class_exists('\STW\AnchorUp\AnchorUp')) {
+                            $anchor_account_number = \STW\AnchorUp\AnchorUp::getAnchorAccountNumber();
+                            if ($anchor_account_number) {
+                                $signup_query = new WP_Query(array(
+                                    'post_type' => 'promo-signup',
+                                    'posts_per_page' => 1,
+                                    'meta_query' => array(
+                                        'relation' => 'AND',
+                                        array(
+                                            'key' => 'specific_signup_anchor_customer_number',
+                                            'value' => $anchor_account_number,
+                                            'compare' => '=',
+                                        ),
+                                        array(
+                                            'key' => 'specific_signup_promotion_relationship',
+                                            'value' => $post_id,
+                                            'compare' => '=',
+                                        ),
+                                    ),
+                                    'fields' => 'ids',
+                                ));
+                                
+                                if ($signup_query->have_posts()) {
+                                    $modal_existing_signup_id = $signup_query->posts[0];
+                                }
+                                wp_reset_postdata();
+                            }
+                        }
+                        echo $modal_existing_signup_id ? 'Update Your Sign-Up' : 'Sign Up for This Promotion';
+                        ?>
+                    </h3>
+                    <button onclick="closeSignupModal()" class="text-gray-400 hover:text-gray-500">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="mt-4" id="signupModalContent">
+                    <?php
+                    // Check if user has already signed up for this promotion
+                    $modal_existing_signup_id = null;
+                    if (class_exists('\STW\AnchorUp\AnchorUp')) {
+                        $anchor_account_number = \STW\AnchorUp\AnchorUp::getAnchorAccountNumber();
+                        if ($anchor_account_number) {
+                            $signup_query = new WP_Query(array(
+                                'post_type' => 'promo-signup',
+                                'posts_per_page' => 1,
+                                'meta_query' => array(
+                                    'relation' => 'AND',
+                                    array(
+                                        'key' => 'specific_signup_anchor_customer_number',
+                                        'value' => $anchor_account_number,
+                                        'compare' => '=',
+                                    ),
+                                    array(
+                                        'key' => 'specific_signup_promotion_relationship',
+                                        'value' => $post_id,
+                                        'compare' => '=',
+                                    ),
+                                ),
+                                'fields' => 'ids',
+                            ));
+                            
+                            if ($signup_query->have_posts()) {
+                                $modal_existing_signup_id = $signup_query->posts[0];
+                            }
+                            wp_reset_postdata();
+                        }
+                    }
+                    
+                    if (!$modal_existing_signup_id) {
+                        // Get the ACF field key for the promotion relationship field
+                        $promotion_field = acf_get_field('specific_signup_promotion_relationship');
+                        $promotion_field_key = $promotion_field ? $promotion_field['key'] : '';
+                        
+                        acf_form(array(
+                            'post_id'       => 'new_post',
+                            'updated_message' => __('<p class="text-green-600 font-semibold mb-4">Your sign-up has been submitted successfully!</p>', 'acf'),
+                            'return'        => get_permalink($post_id),
+                            'post_content' => false,
+                            'honeypot' => true,
+                            'new_post'      => array(
+                                'post_type'     => 'promo-signup',
+                                'post_status'   => 'publish'
+                            ),
+                            'submit_value'  => 'Sign Up for Promotion',
+                            'html_before_fields' => '<div class="space-y-4">' . ($promotion_field_key ? '<input type="hidden" name="acf[' . esc_attr($promotion_field_key) . ']" value="' . esc_attr($post_id) . '">' : ''),
+                            'html_after_fields' => '</div>',
+                        ));
+                    } else {
+                        // Get the ACF field key for the promotion relationship field
+                        $promotion_field = acf_get_field('specific_signup_promotion_relationship');
+                        $promotion_field_key = $promotion_field ? $promotion_field['key'] : '';
+                        
+                        $acf_form_args = array(
+                            'post_id' => $modal_existing_signup_id,
+                            'updated_message' => __('<p class="text-green-600 font-semibold mb-4">Your sign-up has been updated successfully!</p>', 'acf'),
+                            'return' => get_permalink($post_id),
+                            'submit_value' => 'Update Sign-Up',
+                            'html_before_fields' => '<div class="space-y-4">' . ($promotion_field_key ? '<input type="hidden" name="acf[' . esc_attr($promotion_field_key) . ']" value="' . esc_attr($post_id) . '">' : ''),
+                            'html_after_fields' => '</div>',
+                        );
+                        acf_form($acf_form_args);
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     .acf-fields .acf-checkbox-list input {
         width: auto;
@@ -417,6 +694,25 @@ get_header();
     }
     #participation-submission {
         scroll-margin-top: 100px;
+    }
+    
+    #sign-up-promotion {
+        scroll-margin-top: 100px;
+    }
+    
+    /* Hide the promotion relationship field when it's pre-populated */
+    .acf-field[data-name="specific_signup_promotion_relationship"].acf-hidden {
+        display: none !important;
+    }
+    
+    /* Modal styles */
+    #signupModal {
+        z-index: 9999;
+    }
+    
+    #signupModal .bg-white {
+        max-height: 90vh;
+        overflow-y: auto;
     }
     
     /* ACF Button Styling */
@@ -479,6 +775,41 @@ get_header();
         background: linear-gradient(to right, #059669, #047857) !important;
         box-shadow: 0 6px 12px -2px rgba(16, 185, 129, 0.4) !important;
     }
+    
+    /* AJAX form submission styles */
+    #signupModal form.acf-form .acf-spinner {
+        display: none;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+    
+    #signupModal form.acf-form.submitting .acf-spinner {
+        display: inline-block !important;
+    }
+    
+    #signupModal form.acf-form input[type="submit"]:disabled,
+    #signupModal form.acf-form button[type="submit"]:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    #signupModal .acf-notice {
+        margin: 15px 0;
+        padding: 12px 15px;
+        border-radius: 6px;
+    }
+    
+    #signupModal .acf-notice.-success {
+        background-color: #d1fae5;
+        border-left: 4px solid #10b981;
+        color: #065f46;
+    }
+    
+    #signupModal .acf-notice.-error {
+        background-color: #fee2e2;
+        border-left: 4px solid #ef4444;
+        color: #991b1b;
+    }
 </style>
 
 <script>
@@ -486,6 +817,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Check if promo-submission parameter exists in URL
     const urlParams = new URLSearchParams(window.location.search);
     const promoSubmission = urlParams.get('promo-submission');
+    const promoSignup = urlParams.get('promo-signup');
     
     if (promoSubmission) {
         // Wait a bit for the page to fully load, especially if ACF form needs to render
@@ -509,7 +841,183 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 500); // Wait 500ms for page to render
     }
+    
+    if (promoSignup) {
+        // Open the modal if promo-signup parameter is in URL
+        openSignupModal();
+    }
 });
+
+// Modal functions
+function openSignupModal() {
+    const modal = document.getElementById('signupModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        
+        // Hide the promotion relationship field
+        setTimeout(function() {
+            const promotionField = document.querySelector('#signupModal .acf-field[data-name="specific_signup_promotion_relationship"]');
+            if (promotionField) {
+                promotionField.style.display = 'none';
+            }
+        }, 100);
+    }
+}
+
+function closeSignupModal() {
+    const modal = document.getElementById('signupModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = ''; // Restore scrolling
+    }
+}
+
+            // Close modal on Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeSignupModal();
+                }
+            });
+            
+            // Handle ACF form submission in modal via AJAX
+            document.addEventListener('DOMContentLoaded', function() {
+                const signupForm = document.querySelector('#signupModal form.acf-form');
+                if (signupForm) {
+                    signupForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        const form = this;
+                        const submitButton = form.querySelector('input[type="submit"], button[type="submit"]');
+                        const originalButtonText = submitButton ? submitButton.value || submitButton.textContent : '';
+                        
+                        // Add submitting class to form
+                        form.classList.add('submitting');
+                        
+                        // Disable submit button
+                        if (submitButton) {
+                            submitButton.disabled = true;
+                            if (submitButton.value) {
+                                submitButton.value = 'Submitting...';
+                            } else {
+                                submitButton.textContent = 'Submitting...';
+                            }
+                        }
+                        
+                        // Show spinner if available
+                        const spinner = form.querySelector('.acf-spinner');
+                        if (spinner) {
+                            spinner.style.display = 'inline-block';
+                        }
+                        
+                        // Remove any existing error/success messages
+                        const existingMessages = form.querySelectorAll('.acf-notice');
+                        existingMessages.forEach(function(msg) {
+                            msg.remove();
+                        });
+                        
+                        // Get form data - ACF forms include all necessary data
+                        const formData = new FormData(form);
+                        formData.append('action', 'submit_promo_signup');
+                        
+                        // Submit via AJAX
+                        fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+                            method: 'POST',
+                            body: formData,
+                            credentials: 'same-origin'
+                        })
+                        .then(function(response) {
+                            return response.json();
+                        })
+                        .then(function(data) {
+                            if (data.success) {
+                                // Hide the form
+                                form.style.display = 'none';
+                                
+                                // Show success message in modal
+                                const modalContent = document.getElementById('signupModalContent');
+                                if (modalContent) {
+                                    const successMessage = document.createElement('div');
+                                    successMessage.className = 'text-center py-8';
+                                    successMessage.innerHTML = '<div class="bg-green-50 border border-green-200 rounded-lg p-8 mb-4">' +
+                                        '<div class="flex items-center justify-center mb-4">' +
+                                        '<svg class="w-16 h-16 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
+                                        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>' +
+                                        '</svg>' +
+                                        '</div>' +
+                                        '<h3 class="text-2xl font-bold text-gray-900 mb-4">Sign-up Submitted Successfully!</h3>' +
+                                        '<p class="text-lg text-gray-700">Sign-up submitted successfully! An Anchor team representative will be reaching out to you soon with next steps Thank you!</p>' +
+                                        '</div>' +
+                                        '<button onclick="closeSignupModal()" class="inline-flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold transition-all">' +
+                                        '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
+                                        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>' +
+                                        '</svg>' +
+                                        'Close' +
+                                        '</button>';
+                                    
+                                    modalContent.innerHTML = '';
+                                    modalContent.appendChild(successMessage);
+                                }
+                            } else {
+                                // Show error message
+                                const errorMessage = document.createElement('div');
+                                errorMessage.className = 'acf-notice -error acf-message acf-message-error';
+                                errorMessage.innerHTML = '<p class="text-red-600 font-semibold mb-4">' + (data.data.message || 'An error occurred. Please try again.') + '</p>';
+                                form.insertBefore(errorMessage, form.firstChild);
+                                
+                                // Remove submitting class
+                                form.classList.remove('submitting');
+                                
+                                // Re-enable submit button
+                                if (submitButton) {
+                                    submitButton.disabled = false;
+                                    if (submitButton.value) {
+                                        submitButton.value = originalButtonText;
+                                    } else {
+                                        submitButton.textContent = originalButtonText;
+                                    }
+                                }
+                                
+                                // Hide spinner
+                                if (spinner) {
+                                    spinner.style.display = 'none';
+                                }
+                                
+                                // Scroll to error
+                                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                            }
+                        })
+                        .catch(function(error) {
+                            console.error('AJAX Error:', error);
+                            
+                            // Show error message
+                            const errorMessage = document.createElement('div');
+                            errorMessage.className = 'acf-notice -error acf-message acf-message-error';
+                            errorMessage.innerHTML = '<p class="text-red-600 font-semibold mb-4">An error occurred. Please try again.</p>';
+                            form.insertBefore(errorMessage, form.firstChild);
+                            
+                            // Remove submitting class
+                            form.classList.remove('submitting');
+                            
+                            // Re-enable submit button
+                            if (submitButton) {
+                                submitButton.disabled = false;
+                                if (submitButton.value) {
+                                    submitButton.value = originalButtonText;
+                                } else {
+                                    submitButton.textContent = originalButtonText;
+                                }
+                            }
+                            
+                            // Hide spinner
+                            if (spinner) {
+                                spinner.style.display = 'none';
+                            }
+                        });
+                    });
+                }
+            });
 </script>
 
 <?php

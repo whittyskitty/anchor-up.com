@@ -1,35 +1,30 @@
-Subject: Re: Font License Inquiry - Request for Evidence
+Subject: Re: Font License Inquiry - Tonos Font Usage
 
 Dear Sarah,
 
-Thank you for your email. We take intellectual property matters seriously and have conducted a thorough review of our website's font usage.
+Thank you for your follow-up email and the screenshots you provided. We take intellectual property matters seriously and have investigated this issue.
 
-After a comprehensive review of our codebase, theme files, and web assets, we can confirm that our website uses only the following fonts:
+Upon review, we discovered that the Tonos font was inadvertently included in our CSS file, likely from a previous Squarespace site migration. The font was being loaded from a Squarespace CDN URL (static1.squarespace.com), which suggests it originated from a Squarespace template or export.
 
-**Google Fonts (loaded via Elementor):**
-- Roboto — weights 100–900 (normal and italic)
-- Roboto Slab — weights 100–900 (normal and italic)
-- Poppins — weights 100–900 (normal and italic)
+**Immediate Action Taken:**
+We have already removed all references to the Tonos font from our website, including:
+- All @font-face declarations for Tonos-Regular and Tonos-Bold
+- All font-family references to Tonos fonts
+- The font files are no longer being loaded from any source
 
-These fonts are open source and licensed under the Apache License 2.0, which permits commercial use.
+The font has been replaced with system fonts, and the website is now using only properly licensed Google Fonts (Roboto, Roboto Slab, Poppins) and system font stacks.
 
-**System font stack (fallback):**
-- -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif
+**Regarding Licensing:**
+We did not knowingly use or install the Tonos font. It appears to have been included unintentionally during a site migration from Squarespace. We have never purchased a license for Tonos fonts from Black[Foundry], and we have no record of any such purchase.
 
-We found no references to Black[Foundry] fonts in our codebase, theme files, or web assets. We have not purchased or installed any Black[Foundry] fonts, and there is no evidence of Black[Foundry] font usage on our website.
+Before proceeding with any licensing arrangement, we would appreciate clarification on:
+1. The duration and scope of the alleged unlicensed use
+2. Whether Squarespace's use of the font on their platform (from which our CSS was derived) had any bearing on this situation
+3. The specific licensing terms and costs for retroactive coverage, if applicable
 
-**We require specific evidence before we can address this further.** Please provide:
+We are committed to resolving this matter appropriately and ensuring full compliance going forward. However, we believe it is reasonable to discuss the circumstances, given that the font was removed immediately upon notification and was not intentionally installed.
 
-1. The exact font name(s) you claim we are using
-2. Specific URLs or page locations where the font appears
-3. Screenshots or other documentation showing the alleged use
-4. Any font file names or identifiers that would help us verify
-
-Without this evidence, we cannot proceed with any investigation or resolution. **We will not respond to further correspondence unless you provide the requested documentation.**
-
-We are committed to resolving legitimate intellectual property issues, but we need concrete evidence to investigate any claims.
-
-Thank you for your understanding.
+We look forward to your response and are happy to discuss a resolution that is fair and appropriate given the circumstances.
 
 Best regards,
 [Your Name]

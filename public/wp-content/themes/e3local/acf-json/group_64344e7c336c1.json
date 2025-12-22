@@ -265,6 +265,64 @@
             "multiple": 0
         },
         {
+            "key": "field_start_store_sign_up_date",
+            "label": "Start Store Sign Up Date",
+            "name": "start_store_sign_up_date",
+            "aria-label": "",
+            "type": "date_picker",
+            "instructions": "The date when stores can start signing up for this promotion",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "display_format": "F j, Y",
+            "return_format": "F j, Y",
+            "first_day": 0
+        },
+        {
+            "key": "field_end_store_sign_up_date",
+            "label": "End Store Sign Up Date",
+            "name": "end_store_sign_up_date",
+            "aria-label": "",
+            "type": "date_picker",
+            "instructions": "The last date when stores can sign up for this promotion",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "display_format": "F j, Y",
+            "return_format": "F j, Y",
+            "first_day": 0
+        },
+        {
+            "key": "field_max_numbers_of_kits",
+            "label": "Max Numbers of Kits",
+            "name": "max_numbers_of_kits",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Maximum number of kits available for this promotion",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "min": 1,
+            "max": "",
+            "step": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_64347375772e6",
             "label": "Promotion Start Date",
             "name": "promotion_start_date",

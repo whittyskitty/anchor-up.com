@@ -1,0 +1,119 @@
+{
+    "key": "group_specific_promotion_sign_ups",
+    "title": "Specific Promotion Sign Ups",
+    "fields": [
+        {
+            "key": "field_specific_signup_store_name",
+            "label": "Store Name",
+            "name": "specific_signup_store_name",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_specific_signup_anchor_customer_number",
+            "label": "Anchor Customer Number",
+            "name": "specific_signup_anchor_customer_number",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_in_store_anchor_up_three_digit_id",
+            "label": "In Store Anchor Up Three Digit ID",
+            "name": "in_store_anchor_up_three_digit_id",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": 3,
+            "placeholder": "000",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_specific_signup_promotion_relationship",
+            "label": "Promotion",
+            "name": "specific_signup_promotion_relationship",
+            "aria-label": "",
+            "type": "post_object",
+            "instructions": "Select the Anchor Up Promotion this sign up is for",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "anchor-up-promotion"
+            ],
+            "taxonomy": "",
+            "return_format": "object",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "promo-signup"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": [
+        "the_content",
+        "excerpt",
+        "discussion",
+        "format",
+        "page_attributes",
+        "featured_image",
+        "categories",
+        "tags",
+        "send-trackbacks"
+    ],
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1735689600
+}
+
