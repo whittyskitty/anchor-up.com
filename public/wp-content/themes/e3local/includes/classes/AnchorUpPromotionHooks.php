@@ -17,6 +17,7 @@ function anchor_up_get_sendgrid_template_id($template_key) {
         'connection-plus-admin-initial-register-form' => 'd-9a8983f0ef794bfc9a6e6c59b2323b18',
         'anchor-up-foot-traffic-registration' => 'd-829d9a79a4ed441a843f386d95373c04',
         'wordpress-password-reset' => '', // Add your SendGrid template ID here
+        'promo-signup-notification' => '', // Add your SendGrid template ID here for promo signup notifications
     ];
     
     // Try stw_config first
@@ -357,11 +358,163 @@ function anchor_up_promotion_ajax_submit_signup() {
     // Action hook
     do_action('acf/submit_form', $form, $post_id);
     
+    // Email notification will be sent via acf/save_post hook
+    // This ensures it works for both AJAX and regular submissions
+    
     // Return success
     wp_send_json_success(array(
         'message' => 'Sign-up submitted successfully!',
         'post_id' => $post_id
     ));
+}
+
+// Send email notification when promo signup is submitted
+function anchor_up_promotion_send_signup_notification_email($post_id) {
+    // Get signup data
+    $store_name = get_field('specific_signup_store_name', $post_id);
+    $account_number = get_field('specific_signup_anchor_customer_number', $post_id);
+    $three_digit_id = get_field('in_store_anchor_up_three_digit_id', $post_id);
+    $promotion = get_field('specific_signup_promotion_relationship', $post_id);
+    
+    // Get promotion name
+    $promo_name = '';
+    $promo_id = null;
+    if ($promotion) {
+        if (is_array($promotion)) {
+            $promotion = $promotion[0];
+        }
+        if (is_object($promotion)) {
+            $promo_name = $promotion->post_title;
+            $promo_id = $promotion->ID;
+        } elseif (is_numeric($promotion)) {
+            $promo_name = get_the_title($promotion);
+            $promo_id = intval($promotion);
+        }
+    }
+    
+    // Recipient emails
+    $recipients = array(
+        'nick.peters@anchordistributors.com',
+        'scott.whitaker@anchordistributors.com'
+    );
+    
+    // Email subject
+    $subject = 'New Promotion Sign-Up: ' . ($store_name ? $store_name : 'New Sign-Up');
+    
+    // Build HTML email content
+    $html_content = '<html><body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">';
+    $html_content .= '<h2 style="color: #2563eb;">New Promotion Sign-Up Received</h2>';
+    $html_content .= '<p>A new store has signed up for a promotion.</p>';
+    $html_content .= '<table style="width: 100%; max-width: 600px; border-collapse: collapse; margin: 20px 0;">';
+    
+    if ($store_name) {
+        $html_content .= '<tr><td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-weight: bold; width: 200px;">Store Name:</td><td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">' . esc_html($store_name) . '</td></tr>';
+    }
+    
+    if ($account_number) {
+        $html_content .= '<tr><td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-weight: bold;">Account Number:</td><td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">' . esc_html($account_number) . '</td></tr>';
+    }
+    
+    if ($three_digit_id) {
+        $html_content .= '<tr><td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-weight: bold;">3 Digit Code:</td><td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">' . esc_html($three_digit_id) . '</td></tr>';
+    }
+    
+    if ($promo_name) {
+        $html_content .= '<tr><td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-weight: bold;">Promotion:</td><td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">' . esc_html($promo_name) . '</td></tr>';
+    }
+    
+    $html_content .= '<tr><td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-weight: bold;">Date Submitted:</td><td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">' . date('F j, Y g:i A') . '</td></tr>';
+    
+    if ($post_id) {
+        $edit_link = admin_url('post.php?post=' . $post_id . '&action=edit');
+        $html_content .= '<tr><td style="padding: 8px; font-weight: bold;">View Sign-Up:</td><td style="padding: 8px;"><a href="' . esc_url($edit_link) . '" style="color: #2563eb; text-decoration: none;">Edit in WordPress Admin</a></td></tr>';
+    }
+    
+    $html_content .= '</table>';
+    $html_content .= '</body></html>';
+    
+    // Build plain text version
+    $text_content = "New Promotion Sign-Up Received\n\n";
+    $text_content .= "A new store has signed up for a promotion.\n\n";
+    
+    if ($store_name) {
+        $text_content .= "Store Name: " . $store_name . "\n";
+    }
+    if ($account_number) {
+        $text_content .= "Account Number: " . $account_number . "\n";
+    }
+    if ($three_digit_id) {
+        $text_content .= "3 Digit Code: " . $three_digit_id . "\n";
+    }
+    if ($promo_name) {
+        $text_content .= "Promotion: " . $promo_name . "\n";
+    }
+    $text_content .= "Date Submitted: " . date('F j, Y g:i A') . "\n";
+    if ($post_id) {
+        $text_content .= "\nView Sign-Up: " . admin_url('post.php?post=' . $post_id . '&action=edit') . "\n";
+    }
+    
+    // Get from email/name
+    $from_email = get_option('admin_email');
+    $from_name = get_bloginfo('name');
+    
+    // Try to get from Store() if available
+    if (function_exists('Store')) {
+        $store = Store();
+        if ($store) {
+            if (method_exists($store, 'send_as_email') && !empty($store->send_as_email)) {
+                $from_email = $store->send_as_email;
+            }
+            if (method_exists($store, 'send_as_name') && !empty($store->send_as_name)) {
+                $from_name = $store->send_as_name;
+            }
+        }
+    }
+    
+    // Send email to each recipient
+    foreach ($recipients as $recipient) {
+        // Try SendGrid first if available
+        $email_sent = false;
+        
+        if (function_exists('anchor_up_sendgrid_send_email')) {
+            // Check if there's a SendGrid template for promo signups
+            $template_id = anchor_up_get_sendgrid_template_id('promo-signup-notification');
+            
+            if ($template_id) {
+                // Prepare template data
+                $template_data = array(
+                    'store_name' => $store_name ?: '',
+                    'account_number' => $account_number ?: '',
+                    'three_digit_id' => $three_digit_id ?: '',
+                    'promotion_name' => $promo_name ?: '',
+                    'date_submitted' => date('F j, Y g:i A'),
+                    'edit_link' => $post_id ? admin_url('post.php?post=' . $post_id . '&action=edit') : '',
+                );
+                
+                $result = anchor_up_sendgrid_send_email(
+                    $from_email,
+                    $from_name,
+                    $recipient,
+                    $template_id,
+                    $template_data
+                );
+                
+                if ($result !== false) {
+                    $email_sent = true;
+                }
+            }
+        }
+        
+        // Fallback to wp_mail if SendGrid didn't work
+        if (!$email_sent) {
+            $headers = array(
+                'Content-Type: text/html; charset=UTF-8',
+                'From: ' . $from_name . ' <' . $from_email . '>'
+            );
+            
+            wp_mail($recipient, $subject, $html_content, $headers);
+        }
+    }
 }
 
 // Hide the promotion relationship field when it's pre-populated (front-end only)
@@ -384,6 +537,42 @@ function anchor_up_promotion_hide_promotion_field($field) {
         }
     }
     return $field;
+}
+
+// Send email notification when promo signup is created/updated
+add_action('acf/save_post', 'anchor_up_promotion_send_signup_notification_on_save', 15);
+function anchor_up_promotion_send_signup_notification_on_save($post_id) {
+    // Only send for promo-signup post type
+    if (get_post_type($post_id) !== 'promo-signup') {
+        return;
+    }
+    
+    // Check if email was already sent for this post
+    $email_sent = get_post_meta($post_id, '_promo_signup_email_sent', true);
+    if ($email_sent) {
+        return; // Email already sent, skip
+    }
+    
+    // Check if this is a new post (created within last 10 seconds)
+    $post = get_post($post_id);
+    if (!$post) {
+        return;
+    }
+    
+    $post_created = strtotime($post->post_date);
+    $time_diff = time() - $post_created;
+    
+    // Only send if post was created very recently (within 10 seconds)
+    // This ensures we only send for new submissions, not updates
+    if ($time_diff > 10) {
+        return;
+    }
+    
+    // Send notification email
+    anchor_up_promotion_send_signup_notification_email($post_id);
+    
+    // Mark email as sent to prevent duplicates
+    update_post_meta($post_id, '_promo_signup_email_sent', true);
 }
 
 // Update post title on ACF save and save Store ID/Name
@@ -1705,6 +1894,8 @@ function anchor_up_promotion_get_lcb_hero_banner($request) {
     $active_banner = null;
     $active_start_date = null;
     $active_end_date = null;
+    $active_find_store_text = '';
+    $active_promotional_long_text = '';
     
     if ($debug_mode) {
         $debug_info['total_promotions'] = count($promotions);
@@ -1735,6 +1926,8 @@ function anchor_up_promotion_get_lcb_hero_banner($request) {
         }
         
         $hero_banner = get_field('local_christian_bookstore_com_hero_banner_during_promotion_period', $post_id);
+        $find_store_text = get_field('local_christian_find_a_bookstore_near_me_promotional_text', $post_id);
+        $promotional_long_text = get_field('local_christian_bookstore_promotional_long_text', $post_id);
         
         if ($debug_mode) {
             $promo_debug = array(
@@ -1744,6 +1937,8 @@ function anchor_up_promotion_get_lcb_hero_banner($request) {
                 'promotion_start_date_raw' => $promotion_start_date_raw,
                 'promotion_end_date_raw' => $promotion_end_date_raw,
                 'has_banner' => !empty($hero_banner),
+                'has_find_store_text' => !empty($find_store_text),
+                'has_promotional_long_text' => !empty($promotional_long_text),
             );
         }
         
@@ -1846,11 +2041,40 @@ function anchor_up_promotion_get_lcb_hero_banner($request) {
             
             if (!empty($banner_url)) {
                 $active_banner = $banner_url;
-                $active_start_date = date('Y-m-d', $start_timestamp);
+                
+                // For response, use promotion_start_date (not marketing_start_date)
+                // Parse promotion_start_date for the response
+                $promotion_start_timestamp = false;
+                if (preg_match('/^\d{8}$/', $promotion_start_date_raw)) {
+                    // Format: Ymd (e.g., 20251219) - convert to Y-m-d for strtotime
+                    $year = substr($promotion_start_date_raw, 0, 4);
+                    $month = substr($promotion_start_date_raw, 4, 2);
+                    $day = substr($promotion_start_date_raw, 6, 2);
+                    $promotion_start_timestamp = strtotime($year . '-' . $month . '-' . $day);
+                } else {
+                    // Try parsing as formatted date string
+                    $promotion_start_timestamp = strtotime($promotion_start_date_raw);
+                    if (!$promotion_start_timestamp) {
+                        $promotion_start_clean = str_replace(array('/', ','), array('-', ''), $promotion_start_date_raw);
+                        $promotion_start_timestamp = strtotime($promotion_start_clean);
+                    }
+                }
+                
+                // Use promotion_start_date for response, end_date from promotion_end_date
+                $active_start_date = $promotion_start_timestamp ? date('Y-m-d', $promotion_start_timestamp) : date('Y-m-d', $start_timestamp);
                 $active_end_date = date('Y-m-d', $end_timestamp);
+                
+                // Store promotional text fields for response
+                $active_find_store_text = $find_store_text ?: '';
+                $active_promotional_long_text = $promotional_long_text ?: '';
+                
                 if ($debug_mode) {
                     $promo_debug['matched'] = true;
                     $promo_debug['banner_url'] = $banner_url;
+                    $promo_debug['response_start_date'] = $active_start_date;
+                    $promo_debug['response_end_date'] = $active_end_date;
+                    $promo_debug['find_store_text'] = $active_find_store_text;
+                    $promo_debug['promotional_long_text'] = $active_promotional_long_text;
                     $debug_info['promotions_checked'][] = $promo_debug;
                 }
                 break; // Use first matching promotion
@@ -1869,6 +2093,8 @@ function anchor_up_promotion_get_lcb_hero_banner($request) {
         'start_date' => $active_start_date,
         'end_date' => $active_end_date,
         'check_date' => $check_date,
+        'local_christian_find_a_bookstore_near_me_promotional_text' => $active_find_store_text,
+        'local_christian_bookstore_promotional_long_text' => $active_promotional_long_text,
     );
     
     if ($debug_mode) {
@@ -1878,29 +2104,16 @@ function anchor_up_promotion_get_lcb_hero_banner($request) {
     if ($active_banner) {
         return new WP_REST_Response($response_data, 200);
     } else {
-        // Check for default banner on options page
-        $default_banner = get_field('default_background_image_lcb', 'option');
-        $default_banner_url = '';
-        
-        if (!empty($default_banner)) {
-            // Handle different ACF image return formats
-            if (is_string($default_banner)) {
-                $default_banner_url = $default_banner;
-            } elseif (is_array($default_banner)) {
-                $default_banner_url = isset($default_banner['url']) ? $default_banner['url'] : (isset($default_banner['sizes']['full']) ? $default_banner['sizes']['full'] : '');
-            } elseif (is_numeric($default_banner)) {
-                $default_banner_url = wp_get_attachment_image_url($default_banner, 'full');
-            }
-        }
-        
-        // Return success with default banner or null
+        // Return message when no active promotion is found during the date range
         $response_data = array(
             'success' => true,
-            'banner_url' => $default_banner_url ?: null,
+            'banner_url' => null,
             'start_date' => null,
             'end_date' => null,
             'check_date' => $check_date,
-            'message' => $default_banner_url ? 'Using default banner (no active promotion found).' : 'No active promotion banner or default banner found for the specified date.',
+            'local_christian_find_a_bookstore_near_me_promotional_text' => '',
+            'local_christian_bookstore_promotional_long_text' => '',
+            'message' => 'No Banner - No Start or End Date Promotion during this time.',
         );
         
         if ($debug_mode) {

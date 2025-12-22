@@ -357,7 +357,7 @@ get_header();
                 }
             ?>
                 <div class="text-center py-8">
-                    <p class="text-gray-700 mb-6">Sign up to participate in this promotion. Your information will be pre-filled automatically.</p>
+                    <p class="text-gray-700 mb-6">Sign up to participate in this promotion.</p>
                     <button onclick="openSignupModal()" 
                             class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all shadow-lg hover:shadow-xl">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -809,6 +809,43 @@ get_header();
         background-color: #fee2e2;
         border-left: 4px solid #ef4444;
         color: #991b1b;
+    }
+    
+    /* ACF Form Field Borders */
+    #signupModal .acf-field input[type="text"],
+    #signupModal .acf-field input[type="email"],
+    #signupModal .acf-field input[type="number"],
+    #signupModal .acf-field input[type="tel"],
+    #signupModal .acf-field input[type="url"],
+    #signupModal .acf-field textarea,
+    #signupModal .acf-field select {
+        border: 1px solid #d1d5db !important;
+        border-radius: 0.375rem !important;
+        padding: 0.5rem 0.75rem !important;
+        width: 100% !important;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    }
+    
+    #signupModal .acf-field input[type="text"]:focus,
+    #signupModal .acf-field input[type="email"]:focus,
+    #signupModal .acf-field input[type="number"]:focus,
+    #signupModal .acf-field input[type="tel"]:focus,
+    #signupModal .acf-field input[type="url"]:focus,
+    #signupModal .acf-field textarea:focus,
+    #signupModal .acf-field select:focus {
+        border-color: #2563eb !important;
+        outline: none !important;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+    }
+    
+    #signupModal .acf-field input[type="text"]:hover,
+    #signupModal .acf-field input[type="email"]:hover,
+    #signupModal .acf-field input[type="number"]:hover,
+    #signupModal .acf-field input[type="tel"]:hover,
+    #signupModal .acf-field input[type="url"]:hover,
+    #signupModal .acf-field textarea:hover,
+    #signupModal .acf-field select:hover {
+        border-color: #9ca3af !important;
     }
 </style>
 
